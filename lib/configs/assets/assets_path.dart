@@ -6,10 +6,6 @@ class AssetsPath {
   static const LOGO = 'assets/logos/logo.png';
 
   //Assets imagens
-  static const BANNER = 'assets/images/banner-vetor.png';
-
-  static const BANNER_INTERNO = 'assets/images/banner-interno.png';
-
   static const ERROR_404 = 'assets/images/error-404.svg';
 
   static const ERROR_DATA = 'assets/images/error-data.svg';

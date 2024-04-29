@@ -2,8 +2,6 @@
 
 import 'package:mobx/mobx.dart';
 
-import '../../utils/functions_utils.dart';
-
 part 'sessao_model.g.dart';
 
 class SessaoModel = _SessaoModel with _$SessaoModel;
@@ -12,7 +10,6 @@ abstract class _SessaoModel with Store {
   _SessaoModel.fromDatabase(dynamic data) {
     userUuid = data['user_uuid'];
     usuario = data['usuario'];
-    _permissoes = convertPermission(data['permissao']).asObservable();
   }
 
   _SessaoModel(this.userUuid, this.usuario);
@@ -20,14 +17,8 @@ abstract class _SessaoModel with Store {
   late final String userUuid;
   late final String usuario;
 
-  @observable
-  ObservableList<int> _permissoes = ObservableList();
-
-  @computed
-  List<int> get permissoes => [..._permissoes];
-
-  @action
-  void setPermissoes(List<int> permissoes) {
-    _permissoes = permissoes.asObservable();
-  }
+  // Dados do usuário
+  String? cpfCnpj;
+  String? nome;
+  String? email;
 }

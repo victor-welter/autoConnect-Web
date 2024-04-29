@@ -52,7 +52,7 @@ Widget clearField({required dynamic value, required VoidCallback onClear, Color?
   }
 
   return CsIconButton.light(
-    icon: CsIcon.icon(
+    icon: CsIcon(
       icon: Icons.clear,
       color: color,
     ),
@@ -75,9 +75,7 @@ void readRealtimeDatabase(Map map, RealtimeDatabaseModel object) {
   }
 }
 
-List<int> convertPermission(String permission) {
-  return permission.split(',').map((e) => int.parse(e)).toList();
-}
+
 
 String encodePermission(List<int> permission) {
   return permission.join(',');
@@ -87,7 +85,6 @@ Future<(Uint8List?, String)> webFilePicker() async {
   final completer = Completer<(Uint8List?, String)>();
 
   //TODO foi comentado para funcionar no Windows
-
   // web.FileUploadInputElement input = web.FileUploadInputElement();
   // input.click();
 

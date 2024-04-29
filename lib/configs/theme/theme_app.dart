@@ -6,6 +6,7 @@ class ThemeApp {
     splashColor: const Color(0xFF071950),
     scaffoldBackgroundColor: Colors.white,
     primaryColorLight: Colors.white,
+    cardColor: Colors.grey[100],
     fontFamily: 'WorkSan',
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF071950),

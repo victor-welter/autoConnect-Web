@@ -7,6 +7,7 @@ import 'configs/constants.dart';
 import 'configs/theme/theme_app.dart';
 import 'router_app.dart';
 import 'services/service_locator.dart';
+import 'views/rota-error-widget/rota_error_widget_view.dart';
 import 'widgets/no_glow_effect.dart';
 
 final routeObserver = RouteObserver<PageRoute>();
@@ -21,9 +22,9 @@ void main() {
     yield LicenseEntryWithLineBreaks(['google_fonts'], kleeOneLicence);
   });
 
-  // ErrorWidget.builder = (errorDetails) {
-  //   return const RotaErrorWidgetView();
-  // };
+  ErrorWidget.builder = (errorDetails) {
+    return const RotaErrorWidgetView();
+  };
 
   runApp(const MyApp());
 }

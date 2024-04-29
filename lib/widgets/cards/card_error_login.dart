@@ -31,7 +31,7 @@ class CardErrorLogin extends StatelessWidget {
         ),
         child: Row(
           children: [
-            CsIcon.icon(
+            CsIcon(
               icon: Icons.warning_amber_rounded,
               color: theme.colorScheme.errorContainer,
               size: 28,

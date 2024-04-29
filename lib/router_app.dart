@@ -57,7 +57,7 @@ class RouterApp {
     //   }
     // } catch (_) {}
 
-    return LocalRoutes.LOGIN;
+    return LocalRoutes.HOME;
   }
 }
 
@@ -68,7 +68,7 @@ class _RotaInexistenteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: CsSliverAppBar(
-        icon: CsIcon.icon(
+        icon: CsIcon(
           icon: Icons.warning_amber_rounded,
           color: Colors.white,
           size: 100,

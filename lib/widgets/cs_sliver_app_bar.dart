@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../configs/assets/assets_path.dart';
 import '../configs/constants.dart';
 import '../configs/routes/local_routes.dart';
 import '../extensions/context_ext.dart';
@@ -20,7 +19,6 @@ class CsSliverAppBar extends StatelessWidget {
     required this.title,
     required this.body,
     this.icon,
-    this.image,
     this.actions,
     this.actionsBottom,
     this.leading,
@@ -37,7 +35,6 @@ class CsSliverAppBar extends StatelessWidget {
   final Widget? leading;
   final ScrollController? scrollController;
   final VoidCallback? onNotification;
-  final Widget? image;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +57,7 @@ class CsSliverAppBar extends StatelessWidget {
         controller: scrollController,
         headerSliverBuilder: (_, __) => [
           SliverAppBar(
-            expandedHeight: 300,
+            expandedHeight: 200,
             elevation: 0,
             forceElevated: true,
             backgroundColor: theme.appBarTheme.backgroundColor,
@@ -69,14 +66,6 @@ class CsSliverAppBar extends StatelessWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
-                  // Banner background
-                  Positioned.fill(
-                    child: Image.asset(
-                      AssetsPath.BANNER_INTERNO,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
                   // Title and icon AppBar
                   Positioned(
                     top: 0,
@@ -101,10 +90,6 @@ class CsSliverAppBar extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (image != null) ...[
-                            const SizedBox(width: 10),
-                            image!,
-                          ],
                           if (icon != null) ...[
                             const SizedBox(width: 20),
                             icon!,
@@ -153,7 +138,7 @@ class _ActionItens extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Olá, ${getIt<SessaoModel>().usuario}',
+            'Olá, ${getIt<SessaoModel>().nome}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -192,23 +177,17 @@ class _ActionItens extends StatelessWidget {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    action,
                     const VerticalDivider(
                       endIndent: 15,
                       indent: 15,
                       color: Colors.white,
                     ),
-                    action,
                   ],
                 );
               },
             ),
           ],
-
-          const VerticalDivider(
-            endIndent: 15,
-            indent: 15,
-            color: Colors.white,
-          ),
 
           // Botão de sair do sistema
           CsTextButton(
@@ -267,7 +246,7 @@ class _LeadingIcon extends StatelessWidget {
     }
 
     return CsIconButton.dark(
-      icon: const CsIcon.icon(icon: null),
+      icon: const CsIcon(icon: null),
     );
   }
 }

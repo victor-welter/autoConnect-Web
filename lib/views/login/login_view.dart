@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../configs/assets/assets_path.dart';
 import '../../configs/constants.dart';
 import '../../configs/routes/local_routes.dart';
+import '../../controllers/usuarios/usuarios_controller.dart';
 import '../../extensions/context_ext.dart';
 import '../../models/erros/error_model.dart';
 import '../../models/sessao/login_model.dart';
@@ -165,7 +166,7 @@ class _FieldLoginState extends State<_FieldLogin> {
 
         formKey.currentState!.save();
 
-        // await LoginController().login(login);
+        await UsuariosController().login(login);
 
         context.go(LocalRoutes.HOME);
       }
@@ -226,7 +227,7 @@ class _FieldLoginState extends State<_FieldLogin> {
               },
               autofillHints: const [AutofillHints.username],
               prefixIcon: CsIconButton.light(
-                icon: const CsIcon.icon(
+                icon: const CsIcon(
                   icon: Icons.person_outline_rounded,
                   color: Colors.white,
                 ),
@@ -255,7 +256,7 @@ class _FieldLoginState extends State<_FieldLogin> {
                   },
                   autofillHints: const [AutofillHints.password],
                   prefixIcon: CsIconButton.light(
-                    icon: const CsIcon.icon(
+                    icon: const CsIcon(
                       icon: Icons.lock_outline_rounded,
                       color: Colors.white,
                     ),
@@ -263,7 +264,7 @@ class _FieldLoginState extends State<_FieldLogin> {
                   suffixIcon: CsIconButton.light(
                     onPressed: stateView.changeObscurePassword,
                     tooltip: _tooltipPassword(),
-                    icon: CsIcon.icon(
+                    icon: CsIcon(
                       icon: _iconObscureText(),
                       color: Colors.white,
                     ),

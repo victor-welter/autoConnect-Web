@@ -2,22 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CsIcon extends StatelessWidget {
-  const CsIcon.icon({
+  const CsIcon({
     required this.icon,
     this.size = 24,
     this.color,
     super.key,
-  }) : assetsPath = null;
+  });
 
-  const CsIcon.assets({
-    required this.assetsPath,
-    this.size = 30,
-    this.color,
-    super.key,
-  }) : icon = null;
-
-  final String? assetsPath;
-  final IconData? icon;
+  final dynamic icon;
   final double size;
   final Color? color;
 
@@ -25,21 +17,21 @@ class CsIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    if (assetsPath != null) {
-      if (assetsPath!.split('.').last.toLowerCase() == 'svg') {
+    if (icon is String) {
+      if (icon!.split('.').last.toLowerCase() == 'svg') {
         return SvgPicture.asset(
-          assetsPath!,
-          width: size,
-          height: size,
+          icon!,
+        width: size * 1.25,
+        height: size * 1.25,
           colorFilter: color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
         );
       }
 
       return Image.asset(
-        assetsPath!,
+        icon!,
         fit: BoxFit.scaleDown,
-        width: size,
-        height: size,
+        width: size * 1.25,
+        height: size * 1.25,
         color: color,
       );
     }
