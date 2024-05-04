@@ -23,7 +23,7 @@ Future<T?> openSimpleDialog<T>({
   required String title,
   required String description,
   List<Widget>? actions,
-  DialogAction defaultAction = DialogAction.none,
+  DialogAction defaultAction = DialogAction.ok,
   bool tapDismiss = true,
 }) async {
   actions = _defaultAction(defaultAction);

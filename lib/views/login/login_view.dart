@@ -10,6 +10,7 @@ import '../../configs/constants.dart';
 import '../../configs/routes/local_routes.dart';
 import '../../controllers/usuarios/usuarios_controller.dart';
 import '../../extensions/context_ext.dart';
+import '../../mixins/validations_mixin.dart';
 import '../../models/erros/error_model.dart';
 import '../../models/sessao/login_model.dart';
 import '../../widgets/cards/card_error_login.dart';
@@ -20,7 +21,6 @@ import '../../widgets/cs_icon_button.dart';
 import '../../widgets/cs_text_button.dart';
 import '../../widgets/cs_text_form_field.dart';
 import 'login_state.dart';
-import 'login_validate.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -72,8 +72,8 @@ class LoginView extends StatelessWidget {
               return Container(
                 padding: const EdgeInsets.all(20),
                 constraints: BoxConstraints(
-                  maxWidth: context.width * 0.6,
-                  maxHeight: context.height * 0.6,
+                  maxWidth: context.width * 0.7,
+                  maxHeight: context.height * 0.7,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -116,12 +116,12 @@ class _FieldLogin extends StatefulWidget {
   State<_FieldLogin> createState() => _FieldLoginState();
 }
 
-class _FieldLoginState extends State<_FieldLogin> {
+class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
   final login = LoginModel();
   final stateView = LoginState();
 
   ///[Controllers]
-  final usuarioController = TextEditingController();
+  final cpfCnpjController = TextEditingController();
   final senhaController = TextEditingController();
 
   ///Form Validation
@@ -129,7 +129,7 @@ class _FieldLoginState extends State<_FieldLogin> {
 
   @override
   void dispose() {
-    usuarioController.dispose();
+    cpfCnpjController.dispose();
     senhaController.dispose();
 
     super.dispose();
@@ -161,7 +161,7 @@ class _FieldLoginState extends State<_FieldLogin> {
     stateView.setLogginIn(value: true);
 
     try {
-      if (formKey.currentState!.validate()) {
+      if (!formKey.currentState!.validate()) {
         await Future.delayed(const Duration(seconds: 2));
 
         formKey.currentState!.save();
@@ -214,21 +214,25 @@ class _FieldLoginState extends State<_FieldLogin> {
 
             // Campo de Usuário
             CsTextFormField(
-              label: 'Usuário',
-              hintText: 'Informe seu usuário',
-              controller: usuarioController,
-              validator: LoginValidate.usuario,
+              label: 'CPF/CNPJ',
+              hintText: 'Informe o seu CPF/CNPJ',
+              controller: cpfCnpjController,
+              validator: (value) => combine([
+                () => isNotEmpty(value, 'Informe o seu CPF/CNPJ'),
+                () => hasMinLength(value, 11, 'CPF inválido'),
+                () => hasNotRangeLength(value, 11, 14, 'CNPJ inválido'),
+              ]),
               autocorrect: false,
               enableSuggestions: false,
               keyboardType: TextInputType.text,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              onSaved: (usuario) {
-                login.usuario = usuario;
+              onSaved: (cpfCnpj) {
+                login.cpfCnpj = cpfCnpj;
               },
               autofillHints: const [AutofillHints.username],
               prefixIcon: CsIconButton.light(
                 icon: const CsIcon(
-                  icon: Icons.person_outline_rounded,
+                  icon: Icons.credit_card_rounded,
                   color: Colors.white,
                 ),
               ),
@@ -244,7 +248,7 @@ class _FieldLoginState extends State<_FieldLogin> {
                   label: 'Senha',
                   hintText: 'Informe sua senha',
                   controller: senhaController,
-                  validator: LoginValidate.senha,
+                  validator: (value) => isNotEmpty(value, 'Informe a sua senha'),
                   obscureText: stateView.obscurePassword,
                   textCapitalization: TextCapitalization.none,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -307,9 +311,7 @@ class _FieldLoginState extends State<_FieldLogin> {
             CsTextButton(
               color: Colors.white,
               label: 'Ainda não tem uma conta? Registre-se!',
-              onTap: () {
-                context.go(LocalRoutes.CADASTRO_USUARIO);
-              },
+              onTap: () => context.push(LocalRoutes.CADASTRO_USUARIO),
             ),
           ],
         ),

@@ -265,6 +265,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.1"
+  easy_mask:
+    dependency: "direct main"
+    description:
+      name: easy_mask
+      sha256: be5e8c5e25a25f840e5679c6ad3f79602898783b6df4d97583c2d462f4757b1a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   encrypt:
     dependency: "direct main"
     description:
@@ -1146,6 +1154,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.2"
+  validators:
+    dependency: "direct main"
+    description:
+      name: validators
+      sha256: "884515951f831a9c669a41ed6c4d3c61c2a0e8ec6bca761a4480b28e99cecf5d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   vector_graphics:
     dependency: transitive
     description:
