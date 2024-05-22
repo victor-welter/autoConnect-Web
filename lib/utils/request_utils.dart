@@ -12,30 +12,30 @@ import '../services/service_locator.dart';
 Future<String> retornaJWT() async {
   final sessao = getIt<SessaoModel>();
 
-  return await SecureStorageService.read(SharedKeys.SECURE_TOKEN, suffix: sessao.usuario) ?? '';
+  return await SecureStorageService.read(SharedKeys.SECURE_TOKEN, suffix: sessao.cpfCnpj) ?? '';
 }
 
 ///Invalida o token JWT do usuário
 Future<void> resetJWT() async {
   final sessao = getIt<SessaoModel>();
 
-  await SecureStorageService.save(SharedKeys.SECURE_TOKEN, '', suffix: sessao.usuario);
+  await SecureStorageService.save(SharedKeys.SECURE_TOKEN, '', suffix: sessao.cpfCnpj);
 }
 
-void validaResponse(Map response, [ErrorModel? custom]) {
-  if (!response['status']) {
-    if (response['message'] == 'Usuário não encontrado e/ou inativo') {
+void validaResponse(Map<String, dynamic> response, [ErrorModel? custom]) {
+  if (!response['success']) {
+    if (response['error'] == 'Usuário não encontrado.') {
       getIt<NavigationService>().navigatorKey.currentContext!.go(LocalRoutes.LOGIN);
       return;
     }
 
-    if (response['message'] == 'Acesso negado') {
+    if (response['error'] == 'Acesso negado') {
       getIt<NavigationService>().navigatorKey.currentContext!.go(LocalRoutes.HOME);
       return;
     }
 
     if (custom == null) {
-      throw ErrorModel(response['message']);
+      throw ErrorModel(response['error']);
     } else {
       throw custom;
     }

@@ -6,7 +6,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../configs/assets/assets_path.dart';
-import '../../configs/constants.dart';
 import '../../configs/routes/local_routes.dart';
 import '../../controllers/usuarios/usuarios_controller.dart';
 import '../../extensions/context_ext.dart';
@@ -161,7 +160,7 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
     stateView.setLogginIn(value: true);
 
     try {
-      if (!formKey.currentState!.validate()) {
+      if (formKey.currentState!.validate()) {
         await Future.delayed(const Duration(seconds: 2));
 
         formKey.currentState!.save();
@@ -172,14 +171,7 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
       }
     } catch (err) {
       if (err is ErrorModel) {
-        final errors = {
-          ErrorType.login,
-          ErrorType.http_request,
-        };
-
-        if (errors.contains(err.type)) {
-          stateView.setErrorMessage(err.descricao!);
-        }
+        stateView.setErrorMessage(err.descricao!);
       } else {
         stateView.setErrorMessage('Ocorreu um erro desconhecido. Por favor, contate o suporte');
       }

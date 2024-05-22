@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../configs/assets/assets_path.dart';
+import '../../configs/routes/local_routes.dart';
 import '../../controllers/usuarios/usuarios_controller.dart';
 import '../../extensions/context_ext.dart';
 import '../../mixins/validations_mixin.dart';
@@ -159,6 +162,8 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
       await UsuariosController().registrar(cadastro);
 
       showSnackbar(description: 'Usuário criado com sucesso');
+
+      context.go(LocalRoutes.LOGIN);
     } catch (err) {
       stateView.setHasError(value: true);
       if (err is ErrorModel) {
@@ -226,7 +231,7 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
                     return response;
                   },
                   onChanged: (cpfCnpj) {
-                    cadastro.cpfCnpj = stateView.mask.magicMask.clearMask(cpfCnpj);
+                    cadastro.cpfCnpj = cpfCnpj;
                     stateView.setHouveAlteracoes();
                   },
                   autocorrect: false,
@@ -304,70 +309,78 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
             const SizedBox(height: 5),
 
             /// Campo de Senha
-            CsTextFormField(
-              obrigatorio: true,
-              label: 'Senha',
-              hintText: 'Informe sua senha',
-              controller: senhaController,
-              validator: (value) => combine([
-                () => isNotEmpty(value, 'Informe uma senha'),
-                () => hasPassword(value, 'A senha não atende a todos os requisitos'),
-              ]),
-              onChanged: (senha) {
-                setState(() {
-                  cadastro.senha = senha;
-                });
-                stateView.setHouveAlteracoes();
+            Observer(
+              builder: (_) {
+                return CsTextFormField(
+                  obrigatorio: true,
+                  label: 'Senha',
+                  hintText: 'Informe sua senha',
+                  controller: senhaController,
+                  validator: (value) => combine([
+                    () => isNotEmpty(value, 'Informe uma senha'),
+                    () => hasPassword(value, 'A senha não atende a todos os requisitos'),
+                  ]),
+                  onChanged: (senha) {
+                    setState(() {
+                      cadastro.senha = senha;
+                    });
+                    stateView.setHouveAlteracoes();
+                  },
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  obscureText: stateView.obscurePassword,
+                  prefixIcon: CsIconButton.light(
+                    icon: const CsIcon(
+                      icon: Icons.lock_outline_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+                  suffixIcon: CsIconButton.light(
+                    onPressed: stateView.changeObscurePassword,
+                    tooltip: stateView.obscurePassword ? 'Mostrar senha' : 'Esconder senha',
+                    icon: CsIcon(
+                      icon: stateView.obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
               },
-              autocorrect: false,
-              enableSuggestions: false,
-              keyboardType: TextInputType.text,
-              obscureText: stateView.obscurePassword,
-              prefixIcon: CsIconButton.light(
-                icon: const CsIcon(
-                  icon: Icons.lock_outline_rounded,
-                  color: Colors.white,
-                ),
-              ),
-              suffixIcon: CsIconButton.light(
-                onPressed: stateView.changeObscurePassword,
-                tooltip: stateView.obscurePassword ? 'Mostrar senha' : 'Esconder senha',
-                icon: CsIcon(
-                  icon: stateView.obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                  color: Colors.white,
-                ),
-              ),
             ),
 
             const SizedBox(height: 5),
 
             /// Campo de Confirmação de Senha
-            CsTextFormField(
-              label: 'Confirmação de Senha',
-              hintText: 'Confirme sua senha',
-              controller: confirmaSenhaController,
-              validator: (value) => confirmPassword(value, senhaController.text, 'As senhas são diferentes'),
-              onChanged: (_) {
-                stateView.setHouveAlteracoes();
+            Observer(
+              builder: (_) {
+                return CsTextFormField(
+                  label: 'Confirmação de Senha',
+                  hintText: 'Confirme sua senha',
+                  controller: confirmaSenhaController,
+                  validator: (value) => confirmPassword(value, senhaController.text, 'As senhas são diferentes'),
+                  onChanged: (_) {
+                    stateView.setHouveAlteracoes();
+                  },
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  obscureText: stateView.obscureConfirmPassword,
+                  prefixIcon: CsIconButton.light(
+                    icon: const CsIcon(
+                      icon: Icons.lock_outline_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+                  suffixIcon: CsIconButton.light(
+                    onPressed: stateView.changeObscureConfirmPassword,
+                    tooltip: stateView.obscureConfirmPassword ? 'Mostrar senha' : 'Esconder senha',
+                    icon: CsIcon(
+                      icon: stateView.obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
               },
-              autocorrect: false,
-              enableSuggestions: false,
-              keyboardType: TextInputType.text,
-              obscureText: stateView.obscureConfirmPassword,
-              prefixIcon: CsIconButton.light(
-                icon: const CsIcon(
-                  icon: Icons.lock_outline_rounded,
-                  color: Colors.white,
-                ),
-              ),
-              suffixIcon: CsIconButton.light(
-                onPressed: stateView.changeObscureConfirmPassword,
-                tooltip: stateView.obscureConfirmPassword ? 'Mostrar senha' : 'Esconder senha',
-                icon: CsIcon(
-                  icon: stateView.obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                  color: Colors.white,
-                ),
-              ),
             ),
 
             const SizedBox(height: 30),

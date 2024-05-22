@@ -6,39 +6,33 @@ import '../../models/sessao/novo_usuario_model.dart';
 import '../../services/http_service.dart';
 
 class UsuarioRepository {
-  static Future<Map> login(LoginModel login) async {
-    Map jsonData = {
-      'cpfCnpj': login.cpfCnpj,
+  static Future<Map<String, dynamic>> login(LoginModel login) async {
+    Map params = {
+      'cpf_cnpj': login.cpfCnpj,
       'senha': login.senha,
     };
 
-    Map body = {
-      '_data': jsonEncode(jsonData),
-    };
-
-    return await HttpService.post(
+    final response = await HttpService.post(
       rota: WebRoutes.LOGIN,
-      body: body,
-      useToken: false,
+      params: params,
     );
+
+    return response;
   }
 
-  static Future<Map> registrar(NovoUsuarioModel novoUsuario) async {
+  static Future<Map<String, dynamic>> registrar(NovoUsuarioModel novoUsuario) async {
     Map jsonData = {
-      'cpfCnpj': novoUsuario.cpfCnpj,
+      'cpf_cnpj': novoUsuario.cpfCnpj,
       'nome': novoUsuario.nome,
       'email': novoUsuario.email,
       'senha': novoUsuario.senha,
-    };
-
-    Map body = {
-      '_data': jsonEncode(jsonData),
+      'data_criacao': '2024-05-18T00:17:22.818Z',
+      'veiculos': [],
     };
 
     return await HttpService.post(
       rota: WebRoutes.REGISTRAR,
-      body: body,
-      useToken: false,
+      body: jsonEncode(jsonData),
     );
   }
 }

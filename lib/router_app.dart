@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'configs/assets/assets_path.dart';
 import 'configs/constants.dart';
 import 'configs/routes/local_routes.dart';
+import 'models/sessao/sessao_model.dart';
 import 'services/navigator_service.dart';
 import 'services/secure_storage_service.dart';
 import 'services/service_locator.dart';
@@ -44,21 +47,21 @@ class RouterApp {
     ],
   );
 
-  static Future<String?> _redirect(
-      BuildContext context, GoRouterState state) async {
+  static Future<String?> _redirect(BuildContext context, GoRouterState state) async {
     try {
       final data = await SecureStorageService.read(SharedKeys.DADOS_USER) ?? '';
 
-      if (data.isNotEmpty ||
-          RoutesOptions.LIVRE_ACESSO.contains(state.subloc)) {
-        // final sessao = SessaoModel.fromDatabase(jsonDecode(data));
+      if (data.isNotEmpty || RoutesOptions.LIVRE_ACESSO.contains(state.subloc)) {
+        if (!RoutesOptions.LIVRE_ACESSO.contains(state.subloc)) {
+          final sessao = SessaoModel.fromMap(jsonDecode(data));
 
-        //     if (!getIt.isRegistered<SessaoModel>()) {
-        //       getIt.registerSingleton<SessaoModel>(sessao);
-        // }
+          if (!getIt.isRegistered<SessaoModel>()) {
+            getIt.registerSingleton<SessaoModel>(sessao);
+          }
 
-        //     await LoginController().autenticado();
-        //     await LoginController().buscaPermissoes();
+          //     await LoginController().autenticado();
+          //     await LoginController().buscaPermissoes();
+        }
 
         return state.subloc;
       }
@@ -85,8 +88,7 @@ class _RotaInexistenteView extends StatelessWidget {
           child: SingleChildScrollView(
             child: NenhumaInformacao(
               imagePath: AssetsPath.ERROR_404,
-              message:
-                  'Desculpe, a página que você está procurando não foi encontrada. Relate o seu problema abrindo um chamado no botão abaixo!',
+              message: 'Desculpe, a página que você está procurando não foi encontrada. Relate o seu problema abrindo um chamado no botão abaixo!',
             ),
           ),
         ),

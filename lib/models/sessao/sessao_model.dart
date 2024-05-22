@@ -7,18 +7,14 @@ part 'sessao_model.g.dart';
 class SessaoModel = _SessaoModel with _$SessaoModel;
 
 abstract class _SessaoModel with Store {
-  _SessaoModel.fromDatabase(dynamic data) {
-    userUuid = data['user_uuid'];
-    usuario = data['usuario'];
+  _SessaoModel.fromMap(Map<String, dynamic> data) {
+    cpfCnpj = data['cpf_cnpj'];
+    nome = data['nome'];
+    email = data['email'];
   }
 
-  _SessaoModel(this.userUuid, this.usuario);
-
-  late final String userUuid;
-  late final String usuario;
-
   // Dados do usuário
-  String? cpfCnpj;
+  late String cpfCnpj;
   String? nome;
   String? email;
 }

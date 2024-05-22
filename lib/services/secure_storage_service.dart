@@ -1,7 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'encripty_service.dart';
-
 ///Armazena informações confidenciais de forma segura
 class SecureStorageService {
   static final _storage = SharedPreferences.getInstance();
@@ -15,13 +13,11 @@ class SecureStorageService {
 
     String value = pref.getString(key + suffix.toUpperCase())!;
 
-    return EncriptyService().decryptString(value);
+    return value;
   }
 
   static Future<void> save(String key, String value, {String suffix = ''}) async {
     SharedPreferences pref = await _storage;
-
-    value = EncriptyService().encryptString(value);
 
     await pref.setString(key + suffix.toUpperCase(), value);
   }
