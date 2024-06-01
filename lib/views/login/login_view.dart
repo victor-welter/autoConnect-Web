@@ -2,6 +2,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 
@@ -209,14 +210,28 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
               label: 'CPF/CNPJ',
               hintText: 'Informe o seu CPF/CNPJ',
               controller: cpfCnpjController,
-              validator: (value) => combine([
-                () => isNotEmpty(value, 'Informe o seu CPF/CNPJ'),
-                () => hasMinLength(value, 11, 'CPF inválido'),
-                () => hasNotRangeLength(value, 11, 14, 'CNPJ inválido'),
-              ]),
+              validator: (value) {
+                if (value!.isNotEmpty) {
+                  value = stateView.mask.magicMask.clearMask(value);
+                  stateView.setMask(value);
+                }
+
+                final response = combine([
+                  () => isNotEmpty(value, 'Informe o seu CPF/CNPJ'),
+                  () => hasMinLength(value, 11, 'CPF inválido'),
+                  () => hasNotRangeLength(value, 11, 14, 'CNPJ inválido'),
+                ]);
+
+                return response;
+              },
               autocorrect: false,
               enableSuggestions: false,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.number,
+              maxLength: 18,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                stateView.mask,
+              ],
               autovalidateMode: AutovalidateMode.onUserInteraction,
               onSaved: (cpfCnpj) {
                 login.cpfCnpj = cpfCnpj;

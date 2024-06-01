@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use, constant_identifier_names
 
-
 import 'package:dio/dio.dart';
 
 import '../utils/response_validate.dart';
@@ -12,12 +11,15 @@ class HttpService {
   ///
   ///Utilize a propriedade [url] quando desejar usar um link completo, sem interferências da base url selecionada
   static Future<dynamic> get({
-    required String? rota,
-    String? url,
+    required String rota,
     Map? params,
     Map? headers,
     bool validResponse = true,
   }) async {
+    if (headers != null) {
+      headers = {};
+    }
+
     try {
       Response response = await Dio().get(
         '$URL_BASE$rota',

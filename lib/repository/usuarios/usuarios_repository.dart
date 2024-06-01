@@ -31,7 +31,7 @@ class UsuarioRepository {
     };
 
     return await HttpService.post(
-      rota: WebRoutes.REGISTRAR,
+      rota: WebRoutes.REGISTRAR_USUARIO,
       body: jsonEncode(jsonData),
     );
   }

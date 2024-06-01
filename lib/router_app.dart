@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'configs/assets/assets_path.dart';
 import 'configs/constants.dart';
+import 'configs/enums.dart';
 import 'configs/routes/local_routes.dart';
 import 'models/sessao/sessao_model.dart';
 import 'services/navigator_service.dart';
@@ -13,6 +14,7 @@ import 'services/service_locator.dart';
 import 'views/cadastro-usuario/cadastro_usuario_view.dart';
 import 'views/home-screen/home_screen_view.dart';
 import 'views/login/login_view.dart';
+import 'views/seleciona-registro/seleciona_registro_view.dart';
 import 'widgets/cs_icon.dart';
 import 'widgets/cs_sliver_app_bar.dart';
 import 'widgets/nenhuma_informacao.dart';
@@ -43,6 +45,25 @@ class RouterApp {
       GoRoute(
         path: LocalRoutes.CADASTRO_USUARIO,
         builder: (context, state) => const CadastroUsuarioView(),
+      ),
+
+      // Seleciona Registro
+      GoRoute(
+        path: LocalRoutes.SELECIONA_REGISTRO,
+        builder: (context, state) {
+          final extra = state.extra as Map?;
+
+          if (extra == null) {
+            return const HomeScreenView();
+          }
+
+          return SelecionaRegistroView(
+            title: extra['title'] as String,
+            textEmpty: extra['textEmpty'] as String,
+            dataType: extra['dataType'] as SelectDataType,
+            extra: extra['extra'] as dynamic,
+          );
+        },
       ),
     ],
   );

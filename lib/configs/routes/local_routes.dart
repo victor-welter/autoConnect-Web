@@ -6,4 +6,6 @@ class LocalRoutes {
   static const HOME = '/home';
 
   static const CADASTRO_USUARIO = '/cadastro-usuario';
+
+  static const SELECIONA_REGISTRO = '/seleciona-registro';
 }
