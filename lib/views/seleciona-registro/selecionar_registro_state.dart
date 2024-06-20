@@ -51,6 +51,16 @@ abstract class _SelecionarRegistroState with Store {
   }
 
   @action
+  void addRegistro(dynamic registro) {
+    _registros.add(registro);
+  }
+
+  @action
+  void removeRegistro(dynamic registro) {
+    _registros.remove(registro);
+  }
+
+  @action
   void setLoading({required bool value}) {
     _loading = value;
 

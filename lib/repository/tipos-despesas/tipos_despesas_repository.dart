@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../configs/routes/web_routes.dart';
-import '../../models/tipo_despesa/tipo_despesa_model.dart';
+import '../../models/tipo-despesa/tipo_despesa_model.dart';
 import '../../services/http_service.dart';
 
 class TipoDespesaRepository {
@@ -11,7 +11,7 @@ class TipoDespesaRepository {
     };
 
     return await HttpService.post(
-      rota: WebRoutes.BUSCAR_TIPO_COMBUSTIVEL,
+      rota: WebRoutes.BUSCAR_TIPO_DESPESA,
       params: params,
     );
   }
@@ -22,8 +22,19 @@ class TipoDespesaRepository {
     };
 
     return await HttpService.post(
-      rota: WebRoutes.REGISTRAR_TIPO_COMBUSTIVEL,
+      rota: WebRoutes.REGISTRAR_TIPO_DESPESA,
       body: jsonEncode(jsonData),
+    );
+  }
+
+  static Future<Map<String, dynamic>> deletarTipoDespesa(TipoDespesaModel tipoDespesa) async {
+    Map params = {
+      'id_tipo_despesa': tipoDespesa.idTipoDespesa,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_TIPO_DESPESA,
+      params: params,
     );
   }
 }

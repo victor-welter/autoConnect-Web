@@ -138,6 +138,28 @@ mixin _$SelecionarRegistroState on _SelecionarRegistroState, Store {
   }
 
   @override
+  void addRegistro(dynamic registro) {
+    final _$actionInfo = _$_SelecionarRegistroStateActionController.startAction(
+        name: '_SelecionarRegistroState.addRegistro');
+    try {
+      return super.addRegistro(registro);
+    } finally {
+      _$_SelecionarRegistroStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeRegistro(dynamic registro) {
+    final _$actionInfo = _$_SelecionarRegistroStateActionController.startAction(
+        name: '_SelecionarRegistroState.removeRegistro');
+    try {
+      return super.removeRegistro(registro);
+    } finally {
+      _$_SelecionarRegistroStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setLoading({required bool value}) {
     final _$actionInfo = _$_SelecionarRegistroStateActionController.startAction(
         name: '_SelecionarRegistroState.setLoading');

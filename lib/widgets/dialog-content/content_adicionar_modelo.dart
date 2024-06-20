@@ -90,6 +90,7 @@ class _ContentAdicionarModeloState extends State<ContentAdicionarModelo> {
               hintText: 'Selecione a marca do modelo',
               controller: marcaController,
               validator: (value) => validator(value, 'Selecione a marca do modelo'),
+              enabled: false,
             ),
 
             const SizedBox(height: 20),

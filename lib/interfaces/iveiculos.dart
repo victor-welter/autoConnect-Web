@@ -4,4 +4,6 @@ abstract class IVeiculos {
   Future<List<VeiculoModel>> buscarVeiculos(String where);
 
   Future<void> registrar(VeiculoModel veiculo);
+
+  Future<void> deletarVeiculo(VeiculoModel veiculo);
 }

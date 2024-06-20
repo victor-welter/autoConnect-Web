@@ -25,4 +25,15 @@ class MarcasController implements IMarcas {
       rethrow;
     }
   }
+
+  @override
+  Future<void> deletarMarca(MarcaModel marca) async {
+    try {
+      final response = await MarcaRepository.deletarMarca(marca);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

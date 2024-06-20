@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import '../models/filtro-despesa/filtro_despesa_model.dart';
 import 'navigator_service.dart';
 
 final getIt = GetIt.instance;
@@ -8,6 +9,12 @@ final getIt = GetIt.instance;
 setupServiceLocator({bool firstTime = true}) {
   _registerSingleton<NavigationService>(
     instance: NavigationService(),
+    allowAgain: false,
+    firstTime: firstTime,
+  );
+
+  _registerLazySingleton<FiltroDespesaModel>(
+    instance: FiltroDespesaModel(),
     allowAgain: false,
     firstTime: firstTime,
   );

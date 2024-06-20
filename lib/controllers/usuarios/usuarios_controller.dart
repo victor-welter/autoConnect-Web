@@ -20,9 +20,10 @@ class UsuariosController implements IUsuarios {
 
       final sessao = SessaoModel.fromMap(response['data']);
 
+      await SecureStorageService.delete(SharedKeys.DADOS_USER);
       await SecureStorageService.save(SharedKeys.DADOS_USER, jsonEncode(response['data']));
 
-      if (!getIt.isRegistered<SessaoModel>()) {
+      if (!getIt.isRegistered<SessaoModel>() || getIt<SessaoModel>().cpfCnpj != sessao.cpfCnpj) {
         getIt.registerSingleton<SessaoModel>(sessao);
       } else {
         getIt.unregister<SessaoModel>();

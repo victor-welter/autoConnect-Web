@@ -32,6 +32,10 @@ class CadOptions {
   static const SIM = 1;
 
   static const NAO = 0;
+
+  static const MANUTENCAO_PREVENTIVA = 0;
+
+  static const MANUTENCAO_CORRETIVA = 1;
 }
 
 class RoutesOptions {

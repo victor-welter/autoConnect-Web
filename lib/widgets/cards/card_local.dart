@@ -51,15 +51,32 @@ class CardLocal extends StatelessWidget {
               children: [
                 // Nome do descrição
                 Expanded(
-                  child: AutoSizeText(
-                    local.endereco!,
-                    maxLines: 2,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primaryContainer,
-                      fontSize: 30,
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        local.nome!,
+                        maxLines: 2,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primaryContainer,
+                          fontSize: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      AutoSizeText(
+                        local.endereco!,
+                        maxLines: 2,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: theme.colorScheme.primaryContainer,
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 

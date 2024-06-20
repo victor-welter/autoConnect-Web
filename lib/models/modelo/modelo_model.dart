@@ -6,7 +6,7 @@ class ModeloModel {
   ModeloModel.fromMap(Map<String, dynamic> data) {
     idModelo = data['id_modelo'];
     descricao = data['descricao'];
-    marca = MarcaModel.fromMap(data['marca']);
+    marca = MarcaModel.fromMap(data);
   }
 
   int? idModelo;

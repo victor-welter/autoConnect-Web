@@ -24,5 +24,16 @@ class CategoriasController implements ICategorias {
     } catch (_) {
       rethrow;
     }
+  } 
+
+  @override
+  Future<void> deletarCategoria(CategoriaModel categoria) async {
+    try {
+      final response = await CategoriaRepository.deletarCategoria(categoria);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
   }
 }

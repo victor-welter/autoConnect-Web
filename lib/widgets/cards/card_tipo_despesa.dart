@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/tipo_despesa/tipo_despesa_model.dart';
+import '../../models/tipo-despesa/tipo_despesa_model.dart';
 import '../cs_icon.dart';
 import '../cs_icon_button.dart';
 

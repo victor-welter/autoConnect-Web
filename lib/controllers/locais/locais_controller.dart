@@ -25,4 +25,15 @@ class LocaisController implements ILocais {
       rethrow;
     }
   }
+
+  @override
+  Future<void> deletarLocal(LocalModel local) async {
+    try {
+      final response = await LocalRepository.deletarLocal(local);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../extensions/context_ext.dart';
-import '../../models/tipo_despesa/tipo_despesa_model.dart';
+import '../../models/tipo-despesa/tipo_despesa_model.dart';
 import '../../utils/functions_utils.dart';
 import '../cs_elevated_button.dart';
 import '../cs_text_form_field.dart';

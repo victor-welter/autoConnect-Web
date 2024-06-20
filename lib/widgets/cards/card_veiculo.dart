@@ -5,6 +5,7 @@ import '../../models/veiculo/veiculo_model.dart';
 import '../../utils/string_format_utils.dart';
 import '../cs_icon.dart';
 import '../cs_icon_button.dart';
+import '../cs_inline_info.dart';
 
 class CardVeiculo extends StatelessWidget {
   const CardVeiculo({
@@ -75,6 +76,12 @@ class CardVeiculo extends StatelessWidget {
                           color: theme.colorScheme.primaryContainer,
                           fontSize: 30,
                         ),
+                      ),
+                      const SizedBox(height: 5),
+                      CsInlineInfo(
+                        icon: const CsIcon(icon: Icons.local_car_wash_rounded),
+                        label: 'Odômetro',
+                        info: valorNull(veiculo.odometro.toString()),
                       ),
                     ],
                   ),

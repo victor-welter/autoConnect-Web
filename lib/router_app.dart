@@ -12,6 +12,7 @@ import 'services/navigator_service.dart';
 import 'services/secure_storage_service.dart';
 import 'services/service_locator.dart';
 import 'views/cadastro-usuario/cadastro_usuario_view.dart';
+import 'views/dashboard/dashboard_view.dart';
 import 'views/home-screen/home_screen_view.dart';
 import 'views/login/login_view.dart';
 import 'views/seleciona-registro/seleciona_registro_view.dart';
@@ -61,9 +62,17 @@ class RouterApp {
             title: extra['title'] as String,
             textEmpty: extra['textEmpty'] as String,
             dataType: extra['dataType'] as SelectDataType,
+            hasFilter: extra['hasFilter'] as bool? ?? true,
+            hasAdd: extra['hasAdd'] as bool? ?? true,
             extra: extra['extra'] as dynamic,
           );
         },
+      ),
+
+      // Dashboard
+      GoRoute(
+        path: LocalRoutes.DASHBOARD,
+        builder: (context, state) => const DashboardView(),
       ),
     ],
   );
@@ -79,9 +88,6 @@ class RouterApp {
           if (!getIt.isRegistered<SessaoModel>()) {
             getIt.registerSingleton<SessaoModel>(sessao);
           }
-
-          //     await LoginController().autenticado();
-          //     await LoginController().buscaPermissoes();
         }
 
         return state.subloc;

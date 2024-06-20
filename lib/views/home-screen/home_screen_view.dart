@@ -6,7 +6,9 @@ import '../../configs/assets/assets_path.dart';
 import '../../configs/constants.dart';
 import '../../configs/enums.dart';
 import '../../configs/routes/local_routes.dart';
+import '../../controllers/despesas/despesas_controller.dart';
 import '../../extensions/context_ext.dart';
+import '../../models/despesa/despesa_model.dart';
 import '../../services/dialog_service.dart';
 import '../../utils/string_format_utils.dart';
 import '../../widgets/cards/card_despesa.dart';
@@ -15,10 +17,10 @@ import '../../widgets/cs_circular_progress_indicador.dart';
 import '../../widgets/cs_elevated_button.dart';
 import '../../widgets/cs_header.dart';
 import '../../widgets/cs_icon.dart';
-import '../../widgets/cs_icon_button.dart';
 import '../../widgets/cs_sliver_app_bar.dart';
 import '../../widgets/cs_text_button.dart';
 import '../../widgets/dialog-content/content_adicionar_despesa.dart';
+import '../../widgets/dialog-content/content_filtro_despesa.dart';
 import '../../widgets/menu/cs_menu.dart';
 import '../../widgets/nenhuma_informacao.dart';
 import 'home_screen_state.dart';
@@ -34,6 +36,82 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final stateView = HomeScreenState();
 
+  final scrollController = ScrollController();
+  final whereFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchTotalDespesas();
+    _fetchDespesa();
+  }
+
+  @override
+  void dispose() {
+    // stateView.resetWhere();
+
+    scrollController.dispose();
+    whereFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  void _fetchDespesa() async {
+    if (stateView.loading) return;
+
+    try {
+      stateView.setLoading(value: true);
+
+      final despesas = await DespesasController().buscarDespesas();
+
+      if (despesas.isEmpty) {
+        stateView.setFinishLoading(value: true);
+      } else {
+        stateView.addAllDespesas(despesas);
+      }
+
+      stateView.incPage();
+    } catch (_) {
+      stateView.setHasError(value: true);
+    } finally {
+      stateView.setLoading(value: false);
+    }
+  }
+
+  void _fetchTotalDespesas() async {
+    try {
+      final totalAbastecimento = await DespesasController().buscaTotalDespesaPorTipo(2);
+      final totalTrocaPneu = await DespesasController().buscaTotalDespesaPorTipo(3);
+      final totalTrocaOleo = await DespesasController().buscaTotalDespesaPorTipo(6);
+      final totalServico = await DespesasController().buscaTotalDespesaPorTipo(4);
+      final totalManutencao = await DespesasController().buscaTotalDespesaPorTipo(5);
+
+      stateView.setTotalAbastecimento(value: totalAbastecimento);
+      stateView.setTotalTrocaPneu(value: totalTrocaPneu);
+      stateView.setTotalTrocaOleo(value: totalTrocaOleo);
+      stateView.setTotalServico(value: totalServico);
+      stateView.setTotalManutencao(value: totalManutencao);
+    } catch (_) {}
+  }
+
+  void _openFiltros() async {
+    FocusScope.of(context).unfocus();
+
+    await openDialogWithContent(
+      title: 'FILTROS DE DESPESAS',
+      content: ContentFiltroDespesa(
+        onSearch: () {
+          if (!stateView.loading) {
+            stateView.resetPage();
+            _fetchDespesa();
+            _fetchTotalDespesas();
+          }
+        },
+      ),
+    );
+  }
+
   void _onCreate() async {
     try {
       final newDespesa = await openDialogWithContent(
@@ -42,14 +120,40 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       );
 
       if (newDespesa != null) {
-        // await AppsController().saveApp(newAplicativo);
+        await DespesasController().registrar(newDespesa);
 
         stateView.addDespesa(newDespesa);
+
+        _fetchTotalDespesas();
 
         showSnackbar(description: 'Despesa adicionado', seconds: 2);
       }
     } catch (_) {
       showSnackbar(description: 'Erro ao adicionar o despesa', seconds: 2);
+    }
+  }
+
+  void _onUpdate(DespesaModel despesa) async {
+    try {
+      _fetchTotalDespesas();
+
+      showSnackbar(description: 'Despesa atualizada com sucesso!', seconds: 2);
+    } catch (_) {
+      showSnackbar(description: 'Erro ao atualizar despesa!', seconds: 2);
+    }
+  }
+
+  void _onDelete(DespesaModel despesa) async {
+    try {
+      await DespesasController().deletarDespesa(despesa);
+
+      stateView.removeDespesa(despesa);
+
+      _fetchTotalDespesas();
+
+      showSnackbar(description: 'Despesa deletada com sucesso!', seconds: 2);
+    } catch (_) {
+      showSnackbar(description: 'Erro ao deletar despesa!', seconds: 2);
     }
   }
 
@@ -62,20 +166,21 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       drawer: const CsMenu(),
       body: CsSliverAppBar(
         title: 'Seja bem-vindo ao ${App.NAME}',
-        leading: CsIconButton.dark(
-          icon: const CsIcon(
-            icon: Icons.menu_rounded,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
-              scaffoldKey.currentState?.openEndDrawer();
-            } else {
-              scaffoldKey.currentState?.openDrawer();
-            }
-          },
-        ),
         actionsBottom: [
+          // Botão de pesquisa
+          CsActionsButton(
+            color: Colors.blue[800],
+            icon: const CsIcon(
+              icon: Icons.search_rounded,
+              color: Colors.white,
+            ),
+            label: 'PESQUISAR',
+            onPressed: _openFiltros,
+          ),
+
+          const SizedBox(width: 10),
+
+          // Botão de adicionar
           CsActionsButton(
             color: Colors.green[800],
             icon: const CsIcon(
@@ -87,16 +192,43 @@ class _HomeScreenViewState extends State<HomeScreenView> {
           )
         ],
         actions: [
-          // Botão de voltar ao início
+          // Botão de notificações
+          CsTextButton(
+            label: 'NOTIFICAÇÕES',
+            fontSize: 18,
+            color: Colors.white,
+            onTap: () {
+              final args = {
+                'title': 'Notificações',
+                'textEmpty': 'Nenhuma notificação encontrada',
+                'dataType': SelectDataType.notificacao,
+                'hasFilter': false,
+                'hasAdd': false,
+              };
+
+              context.go(LocalRoutes.SELECIONA_REGISTRO, extra: args);
+            },
+          ),
+
+          // Botão de dashboard
+          CsTextButton(
+            label: 'DASHBOARD',
+            fontSize: 18,
+            color: Colors.white,
+            onTap: () => context.go(LocalRoutes.DASHBOARD),
+          ),
+
+          // Botão de meu veículos
           CsTextButton(
             label: 'MEUS VEÍCULOS',
             fontSize: 18,
             color: Colors.white,
             onTap: () {
               final args = {
-                'title': 'Selecionar Veículo',
+                'title': 'Meus Veículo',
                 'textEmpty': 'Nenhum veículo encontrado',
                 'dataType': SelectDataType.veiculo,
+                'hasFilter': false,
               };
 
               context.go(LocalRoutes.SELECIONA_REGISTRO, extra: args);
@@ -143,7 +275,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                             height: 35,
                                             width: context.width * 0.6,
                                             label: 'Tentar novamente',
-                                            onPressed: () {}, //TODO Buscar despesas
+                                            onPressed: _fetchDespesa,
                                           ),
                                         ],
                                       );
@@ -169,9 +301,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
                                           return CardDespesa(
                                             despesa: despesa,
-                                            onSelect: (_) {},
-                                            onUpdate: (_) {},
-                                            onDelete: (_) {},
+                                            onUpdate: _onUpdate,
+                                            onDelete: _onDelete,
                                           );
                                         },
                                       ),
@@ -220,13 +351,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
-                                      child: Text(
-                                        monetario(stateView.totalAbastecimento, 'R\$')!,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: theme.colorScheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Observer(
+                                        builder: (_) {
+                                          return Text(
+                                            monetario(stateView.totalAbastecimento, 'R\$')!,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: theme.colorScheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -265,13 +400,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
-                                      child: Text(
-                                        monetario(stateView.totalTrocaPneu, 'R\$')!,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: theme.colorScheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Observer(
+                                        builder: (_) {
+                                          return Text(
+                                            monetario(stateView.totalTrocaPneu, 'R\$')!,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: theme.colorScheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -310,13 +449,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
-                                      child: Text(
-                                        monetario(stateView.totalTrocaOleo, 'R\$')!,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: theme.colorScheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Observer(
+                                        builder: (_) {
+                                          return Text(
+                                            monetario(stateView.totalTrocaOleo, 'R\$')!,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: theme.colorScheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -355,13 +498,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
-                                      child: Text(
-                                        monetario(stateView.totalServico, 'R\$')!,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: theme.colorScheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Observer(
+                                        builder: (_) {
+                                          return Text(
+                                            monetario(stateView.totalServico, 'R\$')!,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: theme.colorScheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -400,13 +547,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
-                                      child: Text(
-                                        monetario(stateView.totalManutencao, 'R\$')!,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: theme.colorScheme.onSecondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Observer(
+                                        builder: (_) {
+                                          return Text(
+                                            monetario(stateView.totalManutencao, 'R\$')!,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: theme.colorScheme.onSecondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),

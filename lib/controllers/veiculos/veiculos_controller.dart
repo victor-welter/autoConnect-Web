@@ -25,4 +25,15 @@ class VeiculosController implements IVeiculos {
       rethrow;
     }
   }
+
+  @override
+  Future<void> deletarVeiculo(VeiculoModel veiculo) async {
+    try {
+      final response = await VeiculoRepository.deletarVeiculo(veiculo);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

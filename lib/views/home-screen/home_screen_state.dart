@@ -68,13 +68,18 @@ abstract class _HomeScreenStateBase with Store {
   double get totalManutencao => _totalManutencao;
 
   @action
+  void addAllDespesas(List<DespesaModel> despesas) {
+    _despesas.addAll(despesas);
+  }
+
+  @action
   void addDespesa(DespesaModel despesa) {
     _despesas.add(despesa);
   }
 
   @action
-  void addAllDespesas(List<DespesaModel> despesas) {
-    _despesas.addAll(despesas);
+  void removeDespesa(DespesaModel despesa) {
+    _despesas.remove(despesa);
   }
 
   @action

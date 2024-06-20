@@ -33,4 +33,15 @@ class VeiculoRepository {
       body: jsonEncode(jsonData),
     );
   }
+
+  static Future<Map<String, dynamic>> deletarVeiculo(VeiculoModel veiculo) async {
+    Map params = {
+      'id_veiculo': veiculo.idVeiculo,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_VEICULO,
+      params: params,
+    );
+  }
 }

@@ -25,4 +25,15 @@ class ModelosController implements IModelos {
       rethrow;
     }
   }
+
+  @override
+  Future<void> deletarModelo(ModeloModel modelo) async {
+    try {
+      final response = await ModeloRepository.deletarModelo(modelo);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

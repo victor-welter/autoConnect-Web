@@ -28,4 +28,15 @@ class LocalRepository {
       body: jsonEncode(jsonData),
     );
   }
+
+  static Future<Map<String, dynamic>> deletarLocal(LocalModel local) async {
+    Map params = {
+      'id_local': local.idLocal,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_LOCAL,
+      params: params,
+    );
+  }
 }

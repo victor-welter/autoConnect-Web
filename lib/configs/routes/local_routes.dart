@@ -8,4 +8,6 @@ class LocalRoutes {
   static const CADASTRO_USUARIO = '/cadastro-usuario';
 
   static const SELECIONA_REGISTRO = '/seleciona-registro';
+
+  static const DASHBOARD = '/dashboard';
 }

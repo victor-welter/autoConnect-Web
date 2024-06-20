@@ -220,6 +220,17 @@ mixin _$HomeScreenState on _HomeScreenStateBase, Store {
       ActionController(name: '_HomeScreenStateBase', context: context);
 
   @override
+  void addAllDespesas(List<DespesaModel> despesas) {
+    final _$actionInfo = _$_HomeScreenStateBaseActionController.startAction(
+        name: '_HomeScreenStateBase.addAllDespesas');
+    try {
+      return super.addAllDespesas(despesas);
+    } finally {
+      _$_HomeScreenStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addDespesa(DespesaModel despesa) {
     final _$actionInfo = _$_HomeScreenStateBaseActionController.startAction(
         name: '_HomeScreenStateBase.addDespesa');
@@ -231,11 +242,11 @@ mixin _$HomeScreenState on _HomeScreenStateBase, Store {
   }
 
   @override
-  void addAllDespesas(List<DespesaModel> despesas) {
+  void removeDespesa(DespesaModel despesa) {
     final _$actionInfo = _$_HomeScreenStateBaseActionController.startAction(
-        name: '_HomeScreenStateBase.addAllDespesas');
+        name: '_HomeScreenStateBase.removeDespesa');
     try {
-      return super.addAllDespesas(despesas);
+      return super.removeDespesa(despesa);
     } finally {
       _$_HomeScreenStateBaseActionController.endAction(_$actionInfo);
     }

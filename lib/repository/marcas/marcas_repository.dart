@@ -26,4 +26,15 @@ class MarcaRepository {
       body: jsonEncode(jsonData),
     );
   }
+
+    static Future<Map<String, dynamic>> deletarMarca(MarcaModel marca) async {
+    Map params = {
+      'id_marca': marca.idMarca,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_MARCA,
+      params: params,
+    );
+  }
 }

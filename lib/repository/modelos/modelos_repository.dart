@@ -27,4 +27,15 @@ class ModeloRepository {
       body: jsonEncode(jsonData),
     );
   }
+
+  static Future<Map<String, dynamic>> deletarModelo(ModeloModel modelo) async {
+    Map params = {
+      'id_modelo': modelo.idModelo,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_MODELO,
+      params: params,
+    );
+  }
 }

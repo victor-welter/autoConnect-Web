@@ -30,6 +30,7 @@ class _ContentAdicionarVeiculoState extends State<ContentAdicionarVeiculo> {
   ///[Controllers]
   final anoController = TextEditingController();
   final placaController = TextEditingController();
+  final odometroController = TextEditingController();
   final marcaController = TextEditingController();
   final modeloController = TextEditingController();
 
@@ -86,6 +87,22 @@ class _ContentAdicionarVeiculoState extends State<ContentAdicionarVeiculo> {
                 veiculo.placa = placa;
               },
               validator: (value) => validator(value, 'Informe a placa do veículo'),
+              maxLength: 7,
+            ),
+
+            const SizedBox(height: 10),
+
+            // Campo de odometro do veículo
+            CsTextFormField.secondary(
+              obrigatorio: true,
+              label: 'Odômetro do veículo',
+              hintText: 'Informe o odômetro do veículo',
+              controller: odometroController,
+              onChanged: (odometro) {
+                veiculo.odometro = double.tryParse(odometro) ?? 0;
+              },
+              validator: (value) => validator(value, 'Informe o odômetro do veículo'),
+              keyboardType: TextInputType.number,
             ),
 
             const SizedBox(height: 10),
@@ -107,12 +124,16 @@ class _ContentAdicionarVeiculoState extends State<ContentAdicionarVeiculo> {
                 }
               },
               obrigatorio: true,
-              label: 'Marca do modelo',
-              hintText: 'Selecione a marca do modelo',
+              label: 'Marca do Veículo',
+              hintText: 'Selecione a marca do veículo',
               controller: marcaController,
-              validator: (value) => validator(value, 'Selecione a marca do modelo'),
+              validator: (value) => validator(value, 'Selecione a marca do veículo'),
+              enabled: false,
             ),
 
+            const SizedBox(height: 10),
+
+            // Campo de seleção de modelo
             CsTextFormField.secondary(
               onTap: () async {
                 final args = {
@@ -125,14 +146,15 @@ class _ContentAdicionarVeiculoState extends State<ContentAdicionarVeiculo> {
 
                 if (modelo is ModeloModel) {
                   veiculo.modelo = modelo;
-                  marcaController.text = modelo.descricao!;
+                  modeloController.text = modelo.descricao!;
                 }
               },
               obrigatorio: true,
               label: 'Modelo do veículo',
               hintText: 'Selecione o modelo do veículo',
-              controller: marcaController,
+              controller: modeloController,
               validator: (value) => validator(value, 'Selecione o modelo do veículo'),
+              enabled: false,
             ),
 
             const SizedBox(height: 20),

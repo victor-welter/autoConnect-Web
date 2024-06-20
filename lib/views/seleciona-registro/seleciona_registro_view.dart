@@ -8,23 +8,29 @@ import '../../controllers/categorias/categorias_controller.dart';
 import '../../controllers/locais/locais_controller.dart';
 import '../../controllers/marcas/marcas_controller.dart';
 import '../../controllers/modelos/modelos_controller.dart';
-import '../../controllers/tipo-despesas/tipos_despesas_controller.dart';
+import '../../controllers/notificacoes/notificacoes_controller.dart';
 import '../../controllers/tipos-combustiveis/tipos_combustiveis_controller.dart';
+import '../../controllers/tipos-despesas/tipos_despesas_controller.dart';
+import '../../controllers/tipos-problemas/tipos_problemas_controller.dart';
 import '../../controllers/veiculos/veiculos_controller.dart';
 import '../../models/categoria/categoria_model.dart';
 import '../../models/local/local_model.dart';
 import '../../models/marca/marca_model.dart';
 import '../../models/modelo/modelo_model.dart';
-import '../../models/tipo_combustivel/tipo_combustivel_model.dart';
-import '../../models/tipo_despesa/tipo_despesa_model.dart';
+import '../../models/notificacao/notificacao_model.dart';
+import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
+import '../../models/tipo-despesa/tipo_despesa_model.dart';
+import '../../models/tipo-problema/tipo_problema_model.dart';
 import '../../models/veiculo/veiculo_model.dart';
 import '../../services/dialog_service.dart';
 import '../../widgets/cards/card_categoria.dart';
 import '../../widgets/cards/card_local.dart';
 import '../../widgets/cards/card_marca.dart';
 import '../../widgets/cards/card_modelo.dart';
+import '../../widgets/cards/card_notificacao.dart';
 import '../../widgets/cards/card_tipo_combustivel.dart';
 import '../../widgets/cards/card_tipo_despesa.dart';
+import '../../widgets/cards/card_tipo_problema.dart';
 import '../../widgets/cards/card_veiculo.dart';
 import '../../widgets/cs_actions_button.dart';
 import '../../widgets/cs_circular_progress_indicador.dart';
@@ -36,6 +42,7 @@ import '../../widgets/dialog-content/content_adicionar_categoria.dart';
 import '../../widgets/dialog-content/content_adicionar_marca.dart';
 import '../../widgets/dialog-content/content_adicionar_modelo.dart';
 import '../../widgets/dialog-content/content_adicionar_tipo_combustivel.dart';
+import '../../widgets/dialog-content/content_adicionar_tipo_problema.dart';
 import '../../widgets/dialog-content/content_adicionar_veiculo.dart';
 import '../../widgets/nenhuma_informacao.dart';
 import 'selecionar_registro_state.dart';
@@ -45,6 +52,8 @@ class SelecionaRegistroView extends StatefulWidget {
     required this.title,
     required this.textEmpty,
     required this.dataType,
+    this.hasFilter = true,
+    this.hasAdd = true,
     this.extra,
     super.key,
   });
@@ -52,6 +61,8 @@ class SelecionaRegistroView extends StatefulWidget {
   final String title;
   final String textEmpty;
   final SelectDataType dataType;
+  final bool hasFilter;
+  final bool hasAdd;
   final dynamic extra;
 
   @override
@@ -95,6 +106,8 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
         SelectDataType.veiculo => await VeiculosController().buscarVeiculos(stateView.where ?? ''),
         SelectDataType.tipoCombustivel => await TiposCombustiveisController().buscarTiposCombustiveis(stateView.where ?? ''),
         SelectDataType.tipoDespesa => await TiposDespesasController().buscarTiposDespesas(stateView.where ?? ''),
+        SelectDataType.tipoProblema => await TiposProblemasController().buscarTiposProblemas(stateView.where ?? ''),
+        SelectDataType.notificacao => await NotificacoesController().buscarNotificacoes(),
       };
 
       if (registros.isEmpty) {
@@ -115,8 +128,7 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
     stateView.setWhere(where: where);
 
     if (!stateView.loading) {
-      stateView.onFilter();
-      _fetch();
+      _onRefresh();
     }
   }
 
@@ -129,6 +141,7 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
         SelectDataType.modelo => await openDialogWithContent(title: 'Adicionar Modelo', content: const ContentAdicionarModelo()),
         SelectDataType.veiculo => await openDialogWithContent(title: 'Adicionar Veículo', content: const ContentAdicionarVeiculo()),
         SelectDataType.tipoCombustivel => await openDialogWithContent(title: 'Adicionar Tipo Combustível', content: const ContentAdicionarTipoCombustivel()),
+        SelectDataType.tipoProblema => await openDialogWithContent(title: 'Adicionar Tipo Problema', content: const ContentAdicionarTipoProblema()),
         _ => null,
       };
 
@@ -155,9 +168,14 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
           case SelectDataType.tipoDespesa:
             await TiposDespesasController().registrar(newRegistro);
             break;
+          case SelectDataType.tipoProblema:
+            await TiposProblemasController().registrar(newRegistro);
+            break;
           default:
             throw Exception();
         }
+
+        stateView.addRegistro(newRegistro);
 
         showSnackbar(description: 'Registro salvo com sucesso!', seconds: 2);
       }
@@ -172,7 +190,36 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
 
   void _onDelete(dynamic item) async {
     try {
-      //TODO Implementar delete
+      switch (widget.dataType) {
+        case SelectDataType.categoria:
+          await CategoriasController().deletarCategoria(item);
+          break;
+        case SelectDataType.locais:
+          await LocaisController().deletarLocal(item);
+          break;
+        case SelectDataType.marca:
+          await MarcasController().deletarMarca(item);
+          break;
+        case SelectDataType.modelo:
+          await ModelosController().deletarModelo(item);
+          break;
+        case SelectDataType.veiculo:
+          await VeiculosController().deletarVeiculo(item);
+          break;
+        case SelectDataType.tipoCombustivel:
+          await TiposCombustiveisController().deletarTipoCombustivel(item);
+          break;
+        case SelectDataType.tipoDespesa:
+          await TiposDespesasController().deletarTipoDespesa(item);
+          break;
+        case SelectDataType.tipoProblema:
+          await TiposProblemasController().deletarTipoProblema(item);
+          break;
+        default:
+          throw Exception();
+      }
+
+      stateView.removeRegistro(item);
 
       showSnackbar(description: 'Registro deletado com sucesso!', seconds: 2);
     } catch (_) {
@@ -190,6 +237,11 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
     }
   }
 
+  void _onRefresh() async {
+    stateView.onFilter();
+    _fetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,27 +249,33 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
         title: widget.title,
         actionsBottom: [
           // Campo de pesquisa
-          Observer(
-            builder: (_) {
-              return CsSearchField(
-                where: stateView.where,
-                onSearch: _onSearch,
-                focus: whereFocusNode,
-              );
-            },
+          Visibility(
+            visible: widget.hasFilter,
+            child: Observer(
+              builder: (_) {
+                return CsSearchField(
+                  where: stateView.where,
+                  onSearch: _onSearch,
+                  focus: whereFocusNode,
+                );
+              },
+            ),
           ),
 
           const SizedBox(width: 10),
 
           // Botão de adicionar
-          CsActionsButton(
-            color: Colors.green[800],
-            icon: const CsIcon(
-              icon: Icons.add_circle_outline_rounded,
-              color: Colors.white,
+          Visibility(
+            visible: widget.hasAdd,
+            child: CsActionsButton(
+              color: Colors.green[800],
+              icon: const CsIcon(
+                icon: Icons.add_circle_outline_rounded,
+                color: Colors.white,
+              ),
+              label: 'ADICIONAR',
+              onPressed: _onAddRegister,
             ),
-            label: 'ADICIONAR',
-            onPressed: _onAddRegister,
           )
         ],
         body: Observer(
@@ -267,6 +325,8 @@ class _SelecionaRegistroViewState extends State<SelecionaRegistroView> {
                     if (item is VeiculoModel) return CardVeiculo(veiculo: item, onSelect: _onSelect, onDelete: _onDelete, onUpdate: _onUpdate, marginBottom: marginBottom);
                     if (item is TipoCombustivelModel) return CardTipoCombustivel(tipoCombustivel: item, onSelect: _onSelect, onDelete: _onDelete, onUpdate: _onUpdate, marginBottom: marginBottom);
                     if (item is TipoDespesaModel) return CardTipoDespesa(tipoDespesa: item, onSelect: _onSelect, onDelete: _onDelete, onUpdate: _onUpdate, marginBottom: marginBottom);
+                    if (item is TipoProblemaModel) return CardTipoProblema(tipoProblema: item, onSelect: _onSelect, onDelete: _onDelete, onUpdate: _onUpdate, marginBottom: marginBottom);
+                    if (item is NotificacaoModel) return CardNotificacao(notificacao: item, marginBottom: marginBottom);
 
                     return const SizedBox();
                   }

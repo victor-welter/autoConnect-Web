@@ -1,5 +1,5 @@
 import '../../interfaces/itipos_combustiveis.dart';
-import '../../models/tipo_combustivel/tipo_combustivel_model.dart';
+import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
 import '../../repository/tipos-combustiveis/tipos_combustiveis_repository.dart';
 import '../../utils/request_utils.dart';
 
@@ -19,6 +19,17 @@ class TiposCombustiveisController implements ITiposCombustiveis {
   Future<void> registrar(TipoCombustivelModel tiposCombustivel) async {
     try {
       final response = await TipoCombustivelRepository.registrar(tiposCombustivel);
+
+      validaResponse(response);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deletarTipoCombustivel(TipoCombustivelModel tiposCombustivel) async {
+    try {
+      final response = await TipoCombustivelRepository.deletarTipoCombustivel(tiposCombustivel);
 
       validaResponse(response);
     } catch (_) {

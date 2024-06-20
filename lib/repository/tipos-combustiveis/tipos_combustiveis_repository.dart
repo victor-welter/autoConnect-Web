@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../configs/routes/web_routes.dart';
-import '../../models/tipo_combustivel/tipo_combustivel_model.dart';
+import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
 import '../../services/http_service.dart';
 
 class TipoCombustivelRepository {
@@ -24,6 +24,17 @@ class TipoCombustivelRepository {
     return await HttpService.post(
       rota: WebRoutes.REGISTRAR_TIPO_COMBUSTIVEL,
       body: jsonEncode(jsonData),
+    );
+  }
+
+  static Future<Map<String, dynamic>> deletarTipoCombustivel(TipoCombustivelModel tipoCombustivel) async {
+    Map params = {
+      'id_tipo_combustivel': tipoCombustivel.idTipoCombustivel,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_TIPO_COMBUSTIVEL,
+      params: params,
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../extensions/context_ext.dart';
-import '../../models/tipo_combustivel/tipo_combustivel_model.dart';
+import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
 import '../../utils/functions_utils.dart';
 import '../cs_elevated_button.dart';
 import '../cs_text_form_field.dart';

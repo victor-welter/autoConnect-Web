@@ -11,4 +11,6 @@ enum SelectDataType {
   veiculo,
   tipoCombustivel,
   tipoDespesa,
+  tipoProblema,
+  notificacao,
 }

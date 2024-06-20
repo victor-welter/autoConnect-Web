@@ -16,6 +16,7 @@ class CategoriaRepository {
     );
   }
 
+
   static Future<Map<String, dynamic>> registrar(CategoriaModel categoria) async {
     Map jsonData = {
       'descricao': categoria.descricao,
@@ -24,6 +25,17 @@ class CategoriaRepository {
     return await HttpService.post(
       rota: WebRoutes.REGISTRAR_CATEGORIA,
       body: jsonEncode(jsonData),
+    );
+  }
+
+  static Future<Map<String, dynamic>> deletarCategoria(CategoriaModel categoria) async {
+    Map params = {
+      'id_categoria': categoria.idCategoria,
+    };
+
+    return await HttpService.post(
+      rota: WebRoutes.DELETAR_CATEGORIA,
+      params: params,
     );
   }
 }

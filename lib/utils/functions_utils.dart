@@ -5,12 +5,56 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/realtime-database/realtime_database_model.dart';
 import '../services/dialog_service.dart';
 import '../widgets/cs_icon.dart';
 import '../widgets/cs_icon_button.dart';
+
+///Converte a data vinda do banco de dados.
+///
+///Milissegundos -> DateTime
+DateTime? convertDataDB(int? milliseconds) {
+  if (milliseconds == null) {
+    return null;
+  }
+
+  return DateTime.fromMillisecondsSinceEpoch(milliseconds);
+}
+
+String? formatDateBR(DateTime? date) {
+  if (date == null) {
+    return null;
+  }
+
+  return DateFormat('dd/MM/yyyy').format(date);
+}
+
+String? uploadDateFormat(DateTime? date) {
+  if (date == null) {
+    return null;
+  }
+
+  return DateFormat("yyyy-MM-ddTHH:mm:ss.SSS'Z'").format(date.toUtc());
+}
+
+String? uploadHourFormat(DateTime? hour) {
+  if (hour == null) {
+    return null;
+  }
+
+  return DateFormat('HH:mm:ss').format(hour);
+}
+
+DateTime? tryParseDate(dynamic value) {
+  if (value == null) {
+    return null;
+  }
+
+  return DateTime.tryParse(value.toString());
+}
 
 ///Verifica se um objeto é nulo e, em caso de Strings, verifica ainda se ela está vazia
 bool isNullOrEmpty(dynamic value) {
@@ -74,8 +118,6 @@ void readRealtimeDatabase(Map map, RealtimeDatabaseModel object) {
     }
   }
 }
-
-
 
 String encodePermission(List<int> permission) {
   return permission.join(',');
