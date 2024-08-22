@@ -1,4 +1,4 @@
 class LoginModel {
-  String? cpfCnpj;
+  String? email;
   String? senha;
 }

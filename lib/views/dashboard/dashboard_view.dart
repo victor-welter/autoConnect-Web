@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';

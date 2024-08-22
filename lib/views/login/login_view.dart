@@ -2,7 +2,6 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,21 +49,21 @@ class LoginView extends StatelessWidget {
                     maxWidth: context.width * 0.9,
                     maxHeight: context.height * 0.9,
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Image.asset(
                           AssetsPath.LOGO,
                           fit: BoxFit.scaleDown,
                           height: context.height * 0.5,
                           width: context.height * 0.5,
                         ),
-                        const SizedBox(height: 15),
-                        const _FieldLogin(),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 15),
+                      const _FieldLogin(),
+                    ],
                   ),
                 );
               }
@@ -121,7 +120,7 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
   final stateView = LoginState();
 
   ///[Controllers]
-  final cpfCnpjController = TextEditingController();
+  final emailController = TextEditingController();
   final senhaController = TextEditingController();
 
   ///Form Validation
@@ -129,7 +128,7 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
 
   @override
   void dispose() {
-    cpfCnpjController.dispose();
+    emailController.dispose();
     senhaController.dispose();
 
     super.dispose();
@@ -207,39 +206,23 @@ class _FieldLoginState extends State<_FieldLogin> with ValidationsMixin {
 
             // Campo de Usuário
             CsTextFormField(
-              label: 'CPF/CNPJ',
-              hintText: 'Informe o seu CPF/CNPJ',
-              controller: cpfCnpjController,
-              validator: (value) {
-                if (value!.isNotEmpty) {
-                  value = stateView.mask.magicMask.clearMask(value);
-                  stateView.setMask(value);
-                }
-
-                final response = combine([
-                  () => isNotEmpty(value, 'Informe o seu CPF/CNPJ'),
-                  () => hasMinLength(value, 11, 'CPF inválido'),
-                  () => hasNotRangeLength(value, 11, 14, 'CNPJ inválido'),
-                ]);
-
-                return response;
-              },
+              label: 'E-mail',
+              hintText: 'Informe o seu E-mail',
+              controller: emailController,
+              validator: (value) => combine([
+                () => isNotEmpty(value, 'Informe o seu E-mail'),
+              ]),
               autocorrect: false,
               enableSuggestions: false,
-              keyboardType: TextInputType.number,
-              maxLength: 18,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                stateView.mask,
-              ],
+              keyboardType: TextInputType.emailAddress,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              onSaved: (cpfCnpj) {
-                login.cpfCnpj = cpfCnpj;
+              onSaved: (email) {
+                login.email = email;
               },
               autofillHints: const [AutofillHints.username],
               prefixIcon: CsIconButton.light(
                 icon: const CsIcon(
-                  icon: Icons.credit_card_rounded,
+                  icon: Icons.email_outlined,
                   color: Colors.white,
                 ),
               ),

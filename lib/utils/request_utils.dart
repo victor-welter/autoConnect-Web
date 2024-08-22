@@ -12,14 +12,14 @@ import '../services/service_locator.dart';
 Future<String> retornaJWT() async {
   final sessao = getIt<SessaoModel>();
 
-  return await SecureStorageService.read(SharedKeys.SECURE_TOKEN, suffix: sessao.cpfCnpj) ?? '';
+  return await SecureStorageService.read(SharedKeys.SECURE_TOKEN, suffix: sessao.email) ?? '';
 }
 
 ///Invalida o token JWT do usuário
 Future<void> resetJWT() async {
   final sessao = getIt<SessaoModel>();
 
-  await SecureStorageService.save(SharedKeys.SECURE_TOKEN, '', suffix: sessao.cpfCnpj);
+  await SecureStorageService.save(SharedKeys.SECURE_TOKEN, '', suffix: sessao.email);
 }
 
 void validaResponse(Map<String, dynamic> response, [ErrorModel? custom]) {

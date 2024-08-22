@@ -3,7 +3,6 @@ import 'dart:convert';
 import '../../configs/routes/web_routes.dart';
 import '../../models/despesa/despesa_model.dart';
 import '../../models/filtro-despesa/filtro_despesa_model.dart';
-import '../../models/sessao/sessao_model.dart';
 import '../../services/http_service.dart';
 import '../../services/service_locator.dart';
 import '../../utils/functions_utils.dart';
@@ -11,7 +10,7 @@ import '../../utils/functions_utils.dart';
 class DespesaRepository {
   static Future<Map<String, dynamic>> buscarCategorias() async {
     Map params = {
-      'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
+      // 'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
       'id_veiculo': getIt<FiltroDespesaModel>().veiculo?.idVeiculo,
       'startDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataInicial),
       'endDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataFinal),
@@ -25,7 +24,7 @@ class DespesaRepository {
 
   static Future<Map<String, dynamic>> buscaTotalDespesas() async {
     Map params = {
-      'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
+      // 'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
       'id_veiculo': getIt<FiltroDespesaModel>().veiculo?.idVeiculo,
       'startDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataInicial),
       'endDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataFinal),
@@ -39,7 +38,7 @@ class DespesaRepository {
 
   static Future<Map<String, dynamic>> buscaMediaDespesas() async {
     Map params = {
-      'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
+      // 'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
       'id_veiculo': getIt<FiltroDespesaModel>().veiculo?.idVeiculo,
       'startDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataInicial),
       'endDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataFinal),
@@ -54,7 +53,7 @@ class DespesaRepository {
   static Future<Map<String, dynamic>> buscaTotalDespesaPorTipo(int idTipoDespesa) async {
     Map params = {
       'id_tipo_despesa': idTipoDespesa,
-      'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
+      // 'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
       'id_veiculo': getIt<FiltroDespesaModel>().veiculo?.idVeiculo,
       'startDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataInicial),
       'endDate': uploadDateFormat(getIt<FiltroDespesaModel>().dataFinal),

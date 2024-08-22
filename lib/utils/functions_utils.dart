@@ -1,9 +1,3 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
-import 'dart:async';
-//import 'dart:html' as web;
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -121,36 +115,6 @@ void readRealtimeDatabase(Map map, RealtimeDatabaseModel object) {
 
 String encodePermission(List<int> permission) {
   return permission.join(',');
-}
-
-Future<(Uint8List?, String)> webFilePicker() async {
-  final completer = Completer<(Uint8List?, String)>();
-
-  //TODO foi comentado para funcionar no Windows
-  // web.FileUploadInputElement input = web.FileUploadInputElement();
-  // input.click();
-
-  // input.onChange.listen((e) {
-  //   final files = input.files;
-  //   if (files!.length == 1) {
-  //     final file = files[0];
-  //     web.FileReader reader = web.FileReader();
-
-  //     reader.onLoadEnd.listen((e) {
-  //       String filename = input.value!;
-
-  //       completer.complete((reader.result as Uint8List, filename));
-  //     });
-
-  //     reader.onError.listen((_) {
-  //       completer.complete((null, ''));
-  //     });
-
-  //     reader.readAsArrayBuffer(file);
-  //   }
-  // });
-
-  return await completer.future;
 }
 
 //Método 'extension()' do package 'path' não funcionava na Web. Criado método próprio

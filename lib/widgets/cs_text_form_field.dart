@@ -111,8 +111,8 @@ class CsTextFormField extends StatelessWidget {
   final List<String>? autofillHints;
 
   EdgeInsets _definePadding() {
-    const double defaultPadding = 20;
-    const double padding = 45;
+    const double defaultPadding = 15;
+    const double padding = 40;
 
     if (suffixIcon != null && prefixIcon != null) {
       return const EdgeInsets.symmetric(

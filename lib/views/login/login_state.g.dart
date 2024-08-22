@@ -29,12 +29,6 @@ mixin _$LoginState on _LoginState, Store {
       (_$errorMessageComputed ??= Computed<String>(() => super.errorMessage,
               name: '_LoginState.errorMessage'))
           .value;
-  Computed<TextInputMask>? _$maskComputed;
-
-  @override
-  TextInputMask get mask => (_$maskComputed ??=
-          Computed<TextInputMask>(() => super.mask, name: '_LoginState.mask'))
-      .value;
 
   late final _$_obscurePasswordAtom =
       Atom(name: '_LoginState._obscurePassword', context: context);
@@ -84,21 +78,6 @@ mixin _$LoginState on _LoginState, Store {
     });
   }
 
-  late final _$_maskAtom = Atom(name: '_LoginState._mask', context: context);
-
-  @override
-  TextInputMask get _mask {
-    _$_maskAtom.reportRead();
-    return super._mask;
-  }
-
-  @override
-  set _mask(TextInputMask value) {
-    _$_maskAtom.reportWrite(value, super._mask, () {
-      super._mask = value;
-    });
-  }
-
   late final _$_LoginStateActionController =
       ActionController(name: '_LoginState', context: context);
 
@@ -136,17 +115,6 @@ mixin _$LoginState on _LoginState, Store {
   }
 
   @override
-  void setMask(String value) {
-    final _$actionInfo =
-        _$_LoginStateActionController.startAction(name: '_LoginState.setMask');
-    try {
-      return super.setMask(value);
-    } finally {
-      _$_LoginStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void resetState() {
     final _$actionInfo = _$_LoginStateActionController.startAction(
         name: '_LoginState.resetState');
@@ -162,8 +130,7 @@ mixin _$LoginState on _LoginState, Store {
     return '''
 obscurePassword: ${obscurePassword},
 loggingIn: ${loggingIn},
-errorMessage: ${errorMessage},
-mask: ${mask}
+errorMessage: ${errorMessage}
     ''';
   }
 }

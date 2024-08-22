@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import '../../configs/routes/web_routes.dart';
-import '../../models/sessao/sessao_model.dart';
 import '../../models/veiculo/veiculo_model.dart';
 import '../../services/http_service.dart';
-import '../../services/service_locator.dart';
 
 class VeiculoRepository {
   static Future<Map<String, dynamic>> buscarVeiculos(String where) async {
     Map params = {
-      'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
+      // 'usuario_cpf_cnpj': getIt<SessaoModel>().cpfCnpj,
       'where': where,
     };
 
@@ -23,7 +21,7 @@ class VeiculoRepository {
     Map jsonData = {
       "ano": veiculo.ano,
       "placa": veiculo.placa,
-      "usuario_cpf_cnpj": getIt<SessaoModel>().cpfCnpj,
+      // "usuario_cpf_cnpj": getIt<SessaoModel>().cpfCnpj,
       "id_marca": veiculo.marca?.idMarca,
       "id_modelo": veiculo.modelo?.idModelo,
     };

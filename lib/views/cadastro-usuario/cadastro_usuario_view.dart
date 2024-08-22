@@ -59,11 +59,13 @@ class _CadastroUsuarioViewState extends State<CadastroUsuarioView> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        AssetsPath.LOGO,
-                        fit: BoxFit.scaleDown,
-                        height: context.height * 0.5,
-                        width: context.height * 0.5,
+                      Flexible(
+                        child: Image.asset(
+                          AssetsPath.LOGO,
+                          fit: BoxFit.scaleDown,
+                          height: context.height * 0.5,
+                          width: context.height * 0.5,
+                        ),
                       ),
                       const SizedBox(height: 15),
                       const _FieldCadastro(),
@@ -123,7 +125,6 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
   final stateView = CadastroUsuarioState();
 
   ///[Controllers]
-  final cpfCnpjController = TextEditingController();
   final nomeController = TextEditingController();
   final emailController = TextEditingController();
   final senhaController = TextEditingController();
@@ -137,7 +138,6 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
 
   @override
   void dispose() {
-    cpfCnpjController.dispose();
     nomeController.dispose();
     emailController.dispose();
     senhaController.dispose();
@@ -205,54 +205,6 @@ class _FieldCadastroState extends State<_FieldCadastro> with ValidationsMixin {
             ),
 
             const SizedBox(height: 15),
-
-            /// Campo de CPF/CNPJ
-            Observer(
-              builder: (_) {
-                return CsTextFormField(
-                  obrigatorio: true,
-                  label: 'CPF/CNPJ',
-                  hintText: 'Informe seu CPF ou CNPJ',
-                  controller: cpfCnpjController,
-                  validator: (value) {
-                    if (value!.isNotEmpty) {
-                      value = stateView.mask.magicMask.clearMask(value);
-                      stateView.setMask(value);
-                    }
-
-                    final response = combine([
-                      () => isNotEmpty(value, 'Informe o seu CPF/CNPJ'),
-                      () => hasMinLength(value, 11, 'CPF inválido'),
-                      () => isValidateCPF(value),
-                      () => hasNotRangeLength(value, 11, 14, 'CNPJ inválido'),
-                      () => isValidateCNPJ(value),
-                    ]);
-
-                    return response;
-                  },
-                  onChanged: (cpfCnpj) {
-                    cadastro.cpfCnpj = cpfCnpj;
-                    stateView.setHouveAlteracoes();
-                  },
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.number,
-                  maxLength: 18,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                    stateView.mask,
-                  ],
-                  prefixIcon: CsIconButton.light(
-                    icon: const CsIcon(
-                      icon: Icons.credit_card_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 5),
 
             /// Campo de Nome
             CsTextFormField(

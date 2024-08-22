@@ -7,13 +7,17 @@ import 'configs/constants.dart';
 import 'configs/theme/theme_app.dart';
 import 'router_app.dart';
 import 'services/service_locator.dart';
+import 'services/supabase_service.dart';
 import 'views/rota-error-widget/rota_error_widget_view.dart';
 import 'widgets/no_glow_effect.dart';
 
 final routeObserver = RouteObserver<PageRoute>();
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Carrega conexão com o Supabase
+  await SupabaseService.initialize();
 
   setupServiceLocator();
 

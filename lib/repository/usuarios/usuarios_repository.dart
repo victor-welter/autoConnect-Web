@@ -8,7 +8,7 @@ import '../../services/http_service.dart';
 class UsuarioRepository {
   static Future<Map<String, dynamic>> login(LoginModel login) async {
     Map params = {
-      'cpf_cnpj': login.cpfCnpj,
+      'cpf_cnpj': login.email,
       'senha': login.senha,
     };
 
@@ -22,7 +22,7 @@ class UsuarioRepository {
 
   static Future<Map<String, dynamic>> registrar(NovoUsuarioModel novoUsuario) async {
     Map jsonData = {
-      'cpf_cnpj': novoUsuario.cpfCnpj,
+      'cpf_cnpj': novoUsuario.email,
       'nome': novoUsuario.nome,
       'email': novoUsuario.email,
       'senha': novoUsuario.senha,

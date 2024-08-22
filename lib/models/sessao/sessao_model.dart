@@ -8,13 +8,11 @@ class SessaoModel = _SessaoModel with _$SessaoModel;
 
 abstract class _SessaoModel with Store {
   _SessaoModel.fromMap(Map<String, dynamic> data) {
-    cpfCnpj = data['cpf_cnpj'];
-    nome = data['nome'];
     email = data['email'];
+    nome = data['nome'];
   }
 
   // Dados do usuário
-  late String cpfCnpj;
+  late String email;
   String? nome;
-  String? email;
 }
