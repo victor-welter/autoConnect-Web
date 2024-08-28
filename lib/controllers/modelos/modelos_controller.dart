@@ -1,18 +1,25 @@
 import '../../interfaces/imodelos.dart';
 import '../../models/modelo/modelo_model.dart';
 import '../../repository/modelos/modelos_repository.dart';
+import '../../services/supabase_service.dart';
+import '../../utils/functions_utils.dart';
 import '../../utils/request_utils.dart';
 
 class ModelosController implements IModelos {
   @override
   Future<List<ModeloModel>> buscarModelos(String where) async {
-    final response = await ModeloRepository.buscarModelos(where);
+    // Inicializa a query básica
+    var queryBuilder = SupabaseService().client.from('modelo').select('*');
 
-    validaResponse(response);
+    // Adiciona a condição where no campo de descrição do modelo se ela não estiver vazia
+    if (!isNullOrEmpty(where)) {
+      queryBuilder = queryBuilder.ilike('descricao', '%$where%');
+    }
 
-    List data = response['data'];
+    // Executa a query e obtém os resultados
+    final response = await queryBuilder;
 
-    return data.map((e) => ModeloModel.fromMap(e)).toList();
+    return response.map((e) => ModeloModel.fromMap(e)).toList();
   }
 
   @override

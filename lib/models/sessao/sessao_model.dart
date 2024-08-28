@@ -8,11 +8,13 @@ class SessaoModel = _SessaoModel with _$SessaoModel;
 
 abstract class _SessaoModel with Store {
   _SessaoModel.fromMap(Map<String, dynamic> data) {
+    idUsuario = data['id_usuario'];
     email = data['email'];
     nome = data['nome'];
   }
 
   // Dados do usuário
+  late int idUsuario;
   late String email;
   String? nome;
 }

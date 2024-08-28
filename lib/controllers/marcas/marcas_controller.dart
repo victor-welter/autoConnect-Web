@@ -1,18 +1,16 @@
 import '../../interfaces/imarcas.dart';
 import '../../models/marca/marca_model.dart';
 import '../../repository/marcas/marcas_repository.dart';
+import '../../services/supabase_service.dart';
 import '../../utils/request_utils.dart';
 
 class MarcasController implements IMarcas {
   @override
   Future<List<MarcaModel>> buscarMarcas(String where) async {
-    final response = await MarcaRepository.buscarMarcas(where);
+    // Busca todos os marcas
+    final response = await SupabaseService().client.from('marca').select('*').order('descricao', ascending: true);
 
-    validaResponse(response);
-
-    List data = response['data'];
-
-    return data.map((e) => MarcaModel.fromMap(e)).toList();
+    return response.map((e) => MarcaModel.fromMap(e)).toList();
   }
 
   @override

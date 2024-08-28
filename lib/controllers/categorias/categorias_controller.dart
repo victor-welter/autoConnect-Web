@@ -1,18 +1,16 @@
 import '../../interfaces/icategorias.dart';
 import '../../models/categoria/categoria_model.dart';
 import '../../repository/categorias/categorias_repository.dart';
+import '../../services/supabase_service.dart';
 import '../../utils/request_utils.dart';
 
 class CategoriasController implements ICategorias {
   @override
   Future<List<CategoriaModel>> buscarCategorias(String where) async {
-    final response = await CategoriaRepository.buscarCategorias(where);
+    // Busca todas as Categorias
+    final response = await SupabaseService().client.from('categoria').select('*').order('descricao', ascending: true);
 
-    validaResponse(response);
-
-    List data = response['data'];
-
-    return data.map((e) => CategoriaModel.fromMap(e)).toList();
+    return response.map((e) => CategoriaModel.fromMap(e)).toList();
   }
 
   @override
@@ -24,7 +22,7 @@ class CategoriasController implements ICategorias {
     } catch (_) {
       rethrow;
     }
-  } 
+  }
 
   @override
   Future<void> deletarCategoria(CategoriaModel categoria) async {

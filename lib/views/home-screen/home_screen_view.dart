@@ -193,22 +193,22 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         ],
         actions: [
           // Botão de notificações
-          CsTextButton(
-            label: 'NOTIFICAÇÕES',
-            fontSize: 18,
-            color: Colors.white,
-            onTap: () {
-              final args = {
-                'title': 'Notificações',
-                'textEmpty': 'Nenhuma notificação encontrada',
-                'dataType': SelectDataType.notificacao,
-                'hasFilter': false,
-                'hasAdd': false,
-              };
+          // CsTextButton(
+          //   label: 'NOTIFICAÇÕES',
+          //   fontSize: 18,
+          //   color: Colors.white,
+          //   onTap: () {
+          //     final args = {
+          //       'title': 'Notificações',
+          //       'textEmpty': 'Nenhuma notificação encontrada',
+          //       'dataType': SelectDataType.notificacao,
+          //       'hasFilter': false,
+          //       'hasAdd': false,
+          //     };
 
-              context.go(LocalRoutes.SELECIONA_REGISTRO, extra: args);
-            },
-          ),
+          //     context.go(LocalRoutes.SELECIONA_REGISTRO, extra: args);
+          //   },
+          // ),
 
           // Botão de dashboard
           CsTextButton(
