@@ -10,7 +10,6 @@ import '../../models/despesa/despesa_model.dart';
 import '../../models/local/local_model.dart';
 import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
 import '../../models/tipo-despesa/tipo_despesa_model.dart';
-import '../../models/tipo-problema/tipo_problema_model.dart';
 import '../../models/veiculo/veiculo_model.dart';
 import '../../services/dialog_service.dart';
 import '../../utils/functions_utils.dart';
@@ -160,38 +159,38 @@ class _ContentAdicionarDespesaState extends State<ContentAdicionarDespesa> {
             ),
 
             // Campo de tipo de problema
-            Observer(
-              builder: (_) {
-                return Visibility(
-                  visible: despesa.tipoDespesa?.idTipoDespesa == 5,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: CsTextFormField.secondary(
-                      onTap: () async {
-                        final args = {
-                          'title': 'Selecionar Tipo de Problema',
-                          'textEmpty': 'Nenhum Tipo de Problema encontrado',
-                          'dataType': SelectDataType.tipoProblema,
-                        };
+            // Observer(
+            //   builder: (_) {
+            //     return Visibility(
+            //       visible: despesa.tipoDespesa?.idTipoDespesa == 5,
+            //       child: Container(
+            //         margin: const EdgeInsets.only(top: 10),
+            //         child: CsTextFormField.secondary(
+            //           onTap: () async {
+            //             final args = {
+            //               'title': 'Selecionar Tipo de Problema',
+            //               'textEmpty': 'Nenhum Tipo de Problema encontrado',
+            //               'dataType': SelectDataType.tipoProblema,
+            //             };
 
-                        final tipoProblema = await context.push(LocalRoutes.SELECIONA_REGISTRO, extra: args);
+            //             final tipoProblema = await context.push(LocalRoutes.SELECIONA_REGISTRO, extra: args);
 
-                        if (tipoProblema is TipoProblemaModel) {
-                          despesa.tipoProblema = tipoProblema;
-                          tipoProblemaController.text = tipoProblema.descricao!;
-                        }
-                      },
-                      obrigatorio: true,
-                      label: 'Tipo de problema',
-                      hintText: 'Selecione o tipo de problema',
-                      controller: tipoProblemaController,
-                      validator: (value) => validator(value, 'Selecione o tipo de problema'),
-                      enabled: false,
-                    ),
-                  ),
-                );
-              },
-            ),
+            //             if (tipoProblema is TipoProblemaModel) {
+            //               despesa.tipoProblema = tipoProblema;
+            //               tipoProblemaController.text = tipoProblema.descricao!;
+            //             }
+            //           },
+            //           obrigatorio: true,
+            //           label: 'Tipo de problema',
+            //           hintText: 'Selecione o tipo de problema',
+            //           controller: tipoProblemaController,
+            //           validator: (value) => validator(value, 'Selecione o tipo de problema'),
+            //           enabled: false,
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // ),
 
             const SizedBox(height: 10),
 

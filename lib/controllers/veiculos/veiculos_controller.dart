@@ -1,11 +1,9 @@
 import '../../interfaces/iveiculos.dart';
 import '../../models/sessao/sessao_model.dart';
 import '../../models/veiculo/veiculo_model.dart';
-import '../../repository/veiculos/veiculos_repository.dart';
 import '../../services/service_locator.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/functions_utils.dart';
-import '../../utils/request_utils.dart';
 
 class VeiculosController implements IVeiculos {
   @override
@@ -44,9 +42,8 @@ class VeiculosController implements IVeiculos {
   @override
   Future<void> deletarVeiculo(VeiculoModel veiculo) async {
     try {
-      final response = await VeiculoRepository.deletarVeiculo(veiculo);
-
-      validaResponse(response);
+      // Executa a query de deleção
+      await SupabaseService().client.from('veiculo').delete().eq('id_veiculo', veiculo.idVeiculo!);
     } catch (_) {
       rethrow;
     }

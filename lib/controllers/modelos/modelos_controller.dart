@@ -1,9 +1,7 @@
 import '../../interfaces/imodelos.dart';
 import '../../models/modelo/modelo_model.dart';
-import '../../repository/modelos/modelos_repository.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/functions_utils.dart';
-import '../../utils/request_utils.dart';
 
 class ModelosController implements IModelos {
   @override
@@ -25,9 +23,10 @@ class ModelosController implements IModelos {
   @override
   Future<void> registrar(ModeloModel modelo) async {
     try {
-      final response = await ModeloRepository.registrar(modelo);
-
-      validaResponse(response);
+      // Inserção de dados na tabela 'MODELO'
+      await SupabaseService().client.from('modelo').insert({
+        'descricao': modelo.descricao,
+      });
     } catch (_) {
       rethrow;
     }
@@ -36,9 +35,8 @@ class ModelosController implements IModelos {
   @override
   Future<void> deletarModelo(ModeloModel modelo) async {
     try {
-      final response = await ModeloRepository.deletarModelo(modelo);
-
-      validaResponse(response);
+      // Executa a query de deleção
+      await SupabaseService().client.from('modelo').delete().eq('id_modelo', modelo.idModelo!);
     } catch (_) {
       rethrow;
     }

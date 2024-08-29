@@ -1,26 +1,32 @@
 import '../../interfaces/itipos_combustiveis.dart';
 import '../../models/tipo-combustivel/tipo_combustivel_model.dart';
-import '../../repository/tipos-combustiveis/tipos_combustiveis_repository.dart';
-import '../../utils/request_utils.dart';
+import '../../services/supabase_service.dart';
+import '../../utils/functions_utils.dart';
 
 class TiposCombustiveisController implements ITiposCombustiveis {
   @override
   Future<List<TipoCombustivelModel>> buscarTiposCombustiveis(String where) async {
-    final response = await TipoCombustivelRepository.buscarTiposCombustiveis(where);
+    // Inicializa a query básica
+    var queryBuilder = SupabaseService().client.from('tipo_combustivel').select('*');
 
-    validaResponse(response);
+    // Adiciona a condição where no campo de descrição do modelo se ela não estiver vazia
+    if (!isNullOrEmpty(where)) {
+      queryBuilder = queryBuilder.ilike('descricao', '%$where%');
+    }
 
-    List data = response['data'];
+    // Executa a query e obtém os resultados
+    final response = await queryBuilder;
 
-    return data.map((e) => TipoCombustivelModel.fromMap(e)).toList();
+    return response.map((e) => TipoCombustivelModel.fromMap(e)).toList();
   }
 
   @override
   Future<void> registrar(TipoCombustivelModel tiposCombustivel) async {
     try {
-      final response = await TipoCombustivelRepository.registrar(tiposCombustivel);
-
-      validaResponse(response);
+      // Inserção de dados na tabela 'TIPO_COMBUSTIVEL'
+      await SupabaseService().client.from('tipo_combustivel').insert({
+        'descricao': tiposCombustivel.descricao,
+      });
     } catch (_) {
       rethrow;
     }
@@ -29,9 +35,8 @@ class TiposCombustiveisController implements ITiposCombustiveis {
   @override
   Future<void> deletarTipoCombustivel(TipoCombustivelModel tiposCombustivel) async {
     try {
-      final response = await TipoCombustivelRepository.deletarTipoCombustivel(tiposCombustivel);
-
-      validaResponse(response);
+      // Executa a query de deleção
+      await SupabaseService().client.from('tipo_combustivel').delete().eq('id_tipo_combustivel', tiposCombustivel.idTipoCombustivel!);
     } catch (_) {
       rethrow;
     }
