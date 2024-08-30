@@ -91,11 +91,11 @@ class _DashboardViewState extends State<DashboardView> {
       final totalDespesas = await DespesasController().buscaTotalDespesas();
       final mediaDespesas = await DespesasController().buscaMediaDespesas();
 
-      final totalAbastecimento = await DespesasController().buscaTotalDespesaPorTipo(2);
-      final totalTrocaPneu = await DespesasController().buscaTotalDespesaPorTipo(3);
-      final totalTrocaOleo = await DespesasController().buscaTotalDespesaPorTipo(6);
-      final totalServico = await DespesasController().buscaTotalDespesaPorTipo(4);
-      final totalManutencao = await DespesasController().buscaTotalDespesaPorTipo(5);
+      final totalAbastecimento = await DespesasController().buscaTotalDespesaPorTipo(1);
+      final totalTrocaPneu = await DespesasController().buscaTotalDespesaPorTipo(2);
+      final totalTrocaOleo = await DespesasController().buscaTotalDespesaPorTipo(5);
+      final totalServico = await DespesasController().buscaTotalDespesaPorTipo(3);
+      final totalManutencao = await DespesasController().buscaTotalDespesaPorTipo(4);
 
       stateView.setTotalDespesas(value: totalDespesas);
       stateView.setMediaDespesas(value: mediaDespesas);
@@ -361,7 +361,7 @@ class _DashboardViewState extends State<DashboardView> {
                                     bottomTitles: AxisTitles(
                                       axisNameSize: 30,
                                       axisNameWidget: const Text(
-                                        'Imóveis',
+                                        'Despesas',
                                         style: TextStyle(fontWeight: FontWeight.bold),
                                         textScaleFactor: 1,
                                       ),
@@ -369,15 +369,15 @@ class _DashboardViewState extends State<DashboardView> {
                                         getTitlesWidget: (value, __) {
                                           switch (value.toInt()) {
                                             case 0:
-                                              return const Text('Imóvel A', textScaleFactor: 1);
+                                              return const Text('Abastecimento', textScaleFactor: 1);
                                             case 1:
-                                              return const Text('Imóvel B', textScaleFactor: 1);
+                                              return const Text('Tr. Pneu', textScaleFactor: 1);
                                             case 2:
-                                              return const Text('Imóvel C', textScaleFactor: 1);
+                                              return const Text('Serviço', textScaleFactor: 1);
                                             case 3:
-                                              return const Text('Imóvel D', textScaleFactor: 1);
+                                              return const Text('Man. Geral', textScaleFactor: 1);
                                             case 4:
-                                              return const Text('Imóvel E', textScaleFactor: 1);
+                                              return const Text('Tr. Óleo', textScaleFactor: 1);
                                             default:
                                               return const Text('', textScaleFactor: 1);
                                           }

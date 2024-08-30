@@ -9,7 +9,7 @@ class VeiculosController implements IVeiculos {
   @override
   Future<List<VeiculoModel>> buscarVeiculos(String where) async {
     // Inicializa a query básica
-    var queryBuilder = SupabaseService().client.from('veiculo').select('*, modelo!inner(descricao)').eq('id_usuario', getIt<SessaoModel>().idUsuario);
+    var queryBuilder = SupabaseService().client.from('veiculo').select('*, modelo!inner(descricao), marca!inner(descricao)').eq('id_usuario', getIt<SessaoModel>().idUsuario);
 
     // Adiciona a condição where no campo de descrição do modelo se ela não estiver vazia
     if (isNullOrEmpty(where)) {

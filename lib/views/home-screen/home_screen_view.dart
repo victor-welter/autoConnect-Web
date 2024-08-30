@@ -81,11 +81,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   void _fetchTotalDespesas() async {
     try {
-      final totalAbastecimento = await DespesasController().buscaTotalDespesaPorTipo(2);
-      final totalTrocaPneu = await DespesasController().buscaTotalDespesaPorTipo(3);
-      final totalTrocaOleo = await DespesasController().buscaTotalDespesaPorTipo(6);
-      final totalServico = await DespesasController().buscaTotalDespesaPorTipo(4);
-      final totalManutencao = await DespesasController().buscaTotalDespesaPorTipo(5);
+      final totalAbastecimento = await DespesasController().buscaTotalDespesaPorTipo(1);
+      final totalTrocaPneu = await DespesasController().buscaTotalDespesaPorTipo(2);
+      final totalTrocaOleo = await DespesasController().buscaTotalDespesaPorTipo(5);
+      final totalServico = await DespesasController().buscaTotalDespesaPorTipo(3);
+      final totalManutencao = await DespesasController().buscaTotalDespesaPorTipo(4);
 
       stateView.setTotalAbastecimento(value: totalAbastecimento);
       stateView.setTotalTrocaPneu(value: totalTrocaPneu);
